@@ -7,12 +7,13 @@ function getUrlParameter(name) {
 // Get the 'id' parameter value from the current page URL
 const foodId = getUrlParameter('id');
 let food_url; // Declare the food_url variable in the outer scope
+let ingredient_url; 
 
 // Check if 'foodId' is a valid integer
 if (!isNaN(foodId) && Number.isInteger(parseFloat(foodId))) {
     // Construct the food_url with the extracted 'id' value
     food_url = new URL(`https://node.lenoldvaz.com/bh/search-food?id=${foodId}`);
-
+    ingredient_url = new URL(`https://node.lenoldvaz.com/bh/ingredients?id=${foodId}`);
     // The rest of your code to make the API request and process the response
     // ...
 } else {
@@ -41,8 +42,18 @@ function getFoodDetails() {
 
         // Status 200 = Success. Status 400 = Problem. This says if it's successful and no problems, then execute 
         if (request.status >= 200 && request.status < 400) {
+
+
+
+
+            function updateBasicDetails(){
             const foodName = document.getElementsByClassName('food-name')[0]
             foodName.textContent = data.food_name;
+
+            const foodDesc = document.getElementsByClassName('description')[0]
+            foodDesc.textContent = data.food_description;
+
+
 
             // Assuming you have image URLs for veg and nonveg
             const vegImageUrl = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/64e4d43508527271a013fd3c_vegan.svg';
@@ -61,12 +72,48 @@ function getFoodDetails() {
                 foodTypeElement.style.backgroundImage = `url('${nonVegImageUrl}')`;
             }
             
-            //Food tags 
-            const mealType = document.querySelector('.meal-type');
-            mealType.textContent = data.food_tags.meal_type
 
-            const cuisine = document.querySelector('.food_tag_cuisine');
-            cuisine.textContent = data.food_tags.cuisines
+
+
+
+
+            //Food tags 
+            const foodTagsListDiv = document.querySelector('.pill-wrapper')
+            const foodTagsToCheck = ['meal_type', 'cuisines'];
+
+            //iterate through the tags 
+            for (const tagKey of foodTagsToCheck) {
+                const tagValue = data.food_tags[tagKey]
+
+
+
+                if (tagValue) {
+                    // Remove surrounding curly braces and split terms by comma
+                    const foodtagTerms = tagValue.replace(/[{}]/g, '').split(',');
+                    
+
+                    for (const food_tags of foodtagTerms) {
+                        const foodTagsPillDiv = document.createElement('div');
+                        foodTagsPillDiv.classList.add('pill');
+                        
+
+                        const foodTagsText = document.createElement('div');
+                        foodTagsText.classList.add('pill-text')
+                        foodTagsText.textContent = food_tags
+
+                        foodTagsListDiv.appendChild(foodTagsPillDiv);
+
+                        foodTagsPillDiv.appendChild(foodTagsText)
+
+                    }
+
+                }   
+
+            }
+
+
+
+           
             
             
             
@@ -101,7 +148,7 @@ function getFoodDetails() {
                 }
             }
             
-            
+        }
             
             // Function to calculate and update nutrient values
             function updateNutrientValues(nutrientName, nutrientClassName) {
@@ -146,9 +193,9 @@ function getFoodDetails() {
 
                 }
             }
-        }
+            }
 
-        function updateNutrientValuesAbs(nutrientName, nutrientClassName) {
+            function updateNutrientValuesAbs(nutrientName, nutrientClassName) {
              // Find the nutrient in the 'data.nutrition' array
              const nutrient = data.nutrition.find(nutrient => nutrient.nutrient_tag_name === nutrientName);
              
@@ -176,19 +223,19 @@ function getFoodDetails() {
                 }
 
 
-        }
+            }
 
 
-        //Construct a function to display nutrition values 
-        function updateNutriTableValues(nutrientName, nutrientClassName, rda_value) {
+            //Construct a function to display nutrition values 
+            function updateNutriTableValues(nutrientName, nutrientClassName, rda_value) {
             // Find the nutrient in the 'data.nutrition' array
             const nutrient = data.nutrition.find(nutrient => nutrient.nutrient_tag_name === nutrientName);
-            console.log('nutrient', nutrient)
+            //console.log('nutrient', nutrient)
 
 
             // Extract the 'measure' value for the nutrient
             const nutrientMeasure = nutrient ? nutrient.measure : 0;
-                console.log('nutrientMeasure', nutrientMeasure)
+                //console.log('nutrientMeasure', nutrientMeasure)
 
             // Find the element with the specified combo class
             
@@ -204,14 +251,293 @@ function getFoodDetails() {
 
 
 
-        }
+            }
+
+            function updateFoodTime(mealTime, mealClassName) {
+            const meal = data.food_timing[mealTime];
+            const mealDiv = document.querySelector(`.meal-item.${mealClassName}`);
+            
+            if (meal=== 1) {
+                mealDiv.style.backgroundColor = '#e5ecff';
+            }
+            }
+
+            function processPreparationTags(tags) {
+            const tagListDiv = document.querySelector('.food-tag-list');
+        
+            // Define the tags to check
+            const tagsToCheck = ['searchable', 'recommendable', 'packaged_food', 'homemade', 'end_product'];
+        
+            // Iterate through the tags
+            for (const tag of tagsToCheck) {
+                const tagValue = tags[tag];
+        
+                if (tagValue === 't') {
+                    // Create a div for the tag pill
+                    const tagPillDiv = document.createElement('div');
+                    tagPillDiv.classList.add('food-tag-pill');
+        
+                    // Convert tag name to sentence case (e.g., from "searchable" to "Searchable")
+                    const tagName = tag.replace(/_/g, ' ').replace(/\w\S*/g, function (txt) {
+                        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                    });
+        
+                    // Add text and class to the tag pill
+                    tagPillDiv.textContent = tagName;
+                    tagPillDiv.classList.add('food-tag-text');
+        
+                    // Append the tag pill to the tag list
+                    tagListDiv.appendChild(tagPillDiv);
+                }
+            }
+            }
+        
+        
+
+
+            function processHealthTags(healthTags) {
+                const healthTagList = document.querySelector('.health-tag-list');
+                //console.log ('healthTagList', healthTagList )
+
+
+                //Define the tags to find 
+                const healthTagsToCheck = ['positive_health', 'negative_health'];
+
+                //iterate through the tags 
+                for (const tagKey of healthTagsToCheck) {
+                    const tagValue = healthTags[tagKey]
+                    
+                
+
+                if (tagValue) {
+                    // Remove surrounding curly braces and split terms by comma
+                    const tagTerms = tagValue.replace(/[{}]/g, '').split(',');
+                    
+                    // Iterate through each term
+                    for (const term of tagTerms) {
+                        // Create a div for the health tag pill
+                        const healthtagPillDiv = document.createElement('div');
+                        healthtagPillDiv.classList.add('pill');
+                        healthtagPillDiv.classList.add(tagKey === 'positive_health' ? 'positive-health' : 'negative-health');
+        
+                        // Create a div for the pill dot
+                        const pillDotDiv = document.createElement('div');
+                        pillDotDiv.classList.add('pill-dot');
+                        pillDotDiv.classList.add(tagKey === 'positive_health' ? 'positive-health' : 'negative-health')
+        
+                        // Create a div for the pill text
+                        const pillTextDiv = document.createElement('div');
+                        pillTextDiv.classList.add('pill-text');
+        
+                        // Set the text content of the pill text div to the term in sentence case
+                        pillTextDiv.textContent = term.charAt(0).toUpperCase() + term.slice(1);
+        
+                        // Append the pill dot and pill text to the health tag pill div
+                        healthtagPillDiv.appendChild(pillDotDiv);
+                        healthtagPillDiv.appendChild(pillTextDiv);
+        
+                        // Append the health tag pill div to the health tag list
+                        healthTagList.appendChild(healthtagPillDiv);
+                    }
+                }
+            }
+            }
+
+        
+            function updateDisorders(disorders) {
+            const disorderTable = document.querySelector('.card.disorders');
+            //console.log('disorderTable', disorderTable);
+
+
+            if (disorders.length === 0 ) {
+                disorderTable.classList.add('Hide')
+                document.querySelector('.disorder-div-title').classList.add('Hide')
+            } 
+        
+            for (const disorder of disorders) {
+            // Create a new row for each disorder
+            const disorderRow = document.createElement('div');
+            disorderRow.classList.add('table_content_row');
+        
+            // Create the cells
+        
+            // Create name cell
+            const disorderName = document.createElement('div');
+            disorderName.classList.add('table_row_text', 'disorder-name');
+            disorderName.textContent = disorder.disorder_name;
+        
+            // Create pill cell
+            const disorderRiskLevel = document.createElement('div');
+            disorderRiskLevel.classList.add('pill', 
+                disorder.disorder_risk_factor === 1 ? 'red' :
+                disorder.disorder_risk_factor === 2 ? 'orange' :
+                'green'
+            );
+                
+
+
+                const disorderPillBullet = document.createElement('div');
+                disorderPillBullet.classList.add('pill-bullet', 
+                disorder.disorder_risk_factor === 1 ? 'red' :
+                disorder.disorder_risk_factor === 2 ? 'orange' :
+                'green'
+            );
+
+            let riskText;
+        
+            switch (disorder.disorder_risk_factor) {
+                case 1:
+                riskText = 'Avoid this food';
+                break;
+                case 2:
+                riskText = 'Consume in moderation';
+                break;
+                case 3:
+                riskText = 'Can consume freely';
+                break;
+                default:
+                riskText = 'Default risk text';
+            }
+        
+            const disorderRisktext = document.createElement('div');
+            disorderRisktext.classList.add('pill-text', 
+                disorder.disorder_risk_factor === 1 ? 'red' :
+                disorder.disorder_risk_factor === 2 ? 'orange' :
+                'green'
+            );
+            disorderRisktext.textContent = riskText;
+        
+
+
+            //Create Risk reason 
+            const disRiskReason = document.createElement('div')
+            disRiskReason.classList.add('table_row_text','disorder-reason')
+            disRiskReason.textContent = disorder.disorder_risk_reason;
+
+            //Create alternatives
+
+            let Alts = disorder.food_disorder_alts.map(a => a.food_name).join(',')
+
+            const dAlts = document.createElement('div')
+            dAlts.classList.add('table_row_text','disorder-alts')
+            dAlts.textContent = Alts
+
+
+
+
+            // Append pill items to pill
+            
+            disorderRiskLevel.appendChild(disorderPillBullet);
+            disorderRiskLevel.appendChild(disorderRisktext);
+        
+            // Append cells to the disorder row
+            disorderRow.appendChild(disorderName);
+            disorderRow.appendChild(disorderRiskLevel);
+            disorderRow.appendChild(disRiskReason);
+            disorderRow.appendChild(dAlts);
+        
+            // Append the disorder row to the parent element
+            disorderTable.appendChild(disorderRow);
+            }
+            }
+            
+            
+            function updateFoodPairing(pairings) {
+                const foodPairingWrapper = document.querySelector('.food-pairing-wrapping');
+                let index = 1;
+
+
+
+                
+
+                for (const priorityKey in pairings) {
+                     //create a row 
+                     const pairingRow = document.createElement('div')
+                     pairingRow.classList.add('food-pairing-row')
+
+                    if (pairings.hasOwnProperty(priorityKey)) {
+                        const priorityFoods = pairings[priorityKey];
+
+                       
+            
+                        // Create a div for the priority
+                        const priorityDiv = document.createElement('div');
+                        priorityDiv.classList.add('food-pairing-priority-text');
+                        priorityDiv.textContent = index.toString();
+                        
+
+                        pairingRow.appendChild(priorityDiv)
+            
+                        // Create a div to hold paired foods
+                        //const pairedFoodsDiv = document.createElement('div');
+                        //pairedFoodsDiv.classList.add('food-pairing-items');
+            
+                        // Iterate through the foods in this priority
+                        priorityFoods.forEach((foodItem) => {
+
+
+                            let pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65000c6dc5d37cacb456bd5e_rice.svg'
+
+
+                            const pairedFoodItem = document.createElement('div');
+                            pairedFoodItem.classList.add('food-pairing-item');
+                            pairedFoodItem.textContent = foodItem;
+
+                            const pairedFoodImage = document.createElement('div');
+                            pairedFoodImage.classList.add('pairedFoodImage');
+                            pairedFoodImage.backgroundImage =`url('${pairedImageIcon}')`;
+
+
+                            pairedFoodItem.appendChild(pairedFoodImage);
+                            pairingRow.appendChild(pairedFoodItem);
+                        });
+            
+                        // Append the priority and paired foods to the wrapper
+                        //pairingRow.appendChild(pairedFoodItem);
+                        
+                        foodPairingWrapper.appendChild(pairingRow);
+                        
+                    }
+                }
+            }
+            
+            
+            
+
+            
+           
+            
+
+
+
+        updateBasicDetails();
+        // Update disorders
+        updateDisorders(data.disorder_data);
+            
+        //Update food Pairing 
+        updateFoodPairing(data.food_pairing);
+        //update health tags
+        processHealthTags(data.food_tags);
+        
+        // Update prep tags
+        processPreparationTags(data.preparation_tags);
+        
+        
+        //Update meal time 
+        updateFoodTime('breakfast', 'bf');
+        updateFoodTime('lunch', 'lunch');
+        updateFoodTime('dinner', 'dinner');
+        updateFoodTime('snack', 'snack');
+        
+
+        //Update Nutrition table. You can change the rda values here 
         updateNutriTableValues('FAT', 'fat', 55)
-        updateNutriTableValues('FASAT', 'FASAT', 20)
-        updateNutriTableValues('FATRN', 'FATRN', 1)
+        updateNutriTableValues('FASAT', 'fasat', 20)
+        updateNutriTableValues('FATRN', 'fatrn', 1)
         //updateNutriTableValues('FASAT', 'fat', 6)
         //updateNutriTableValues('FASAT', 'fat', 28)
-        updateNutriTableValues('CHOLE', 'CHOLE', 300)
-        updateNutriTableValues('NA', 'NA', 2000)
+        updateNutriTableValues('CHOLE', 'chole', 300)
+        updateNutriTableValues('NA', 'na', 2000)
         //updateNutriTableValues('FASAT', 'fat', 30)
 
 
@@ -230,7 +556,10 @@ function getFoodDetails() {
     request.send();
 }
 
+
+
 // This fires all of the defined functions when the document is "ready" or loaded
-document.addEventListener("DOMContentLoaded", function() {
+//document.addEventListener("DOMContentLoaded", function() {
     getFoodDetails();
-});
+   
+//});
