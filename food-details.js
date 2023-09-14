@@ -445,65 +445,129 @@ function getFoodDetails() {
             function updateFoodPairing(pairings) {
                 const foodPairingWrapper = document.querySelector('.food-pairing-wrapping');
                 let index = 1;
-
-
-
-                
-
+            
                 for (const priorityKey in pairings) {
-                     //create a row 
-                     const pairingRow = document.createElement('div')
-                     pairingRow.classList.add('food-pairing-row')
-
+                    // Create a row 
+                    const pairingRow = document.createElement('div');
+                    pairingRow.classList.add('food-pairing-row');
+            
                     if (pairings.hasOwnProperty(priorityKey)) {
                         const priorityFoods = pairings[priorityKey];
-
-                       
             
                         // Create a div for the priority
                         const priorityDiv = document.createElement('div');
                         priorityDiv.classList.add('food-pairing-priority-text');
                         priorityDiv.textContent = index.toString();
-                        
-
-                        pairingRow.appendChild(priorityDiv)
+                        index++;
             
-                        // Create a div to hold paired foods
-                        //const pairedFoodsDiv = document.createElement('div');
-                        //pairedFoodsDiv.classList.add('food-pairing-items');
+                        pairingRow.appendChild(priorityDiv);
             
                         // Iterate through the foods in this priority
                         priorityFoods.forEach((foodItem) => {
+                            let pairedImageIcon; // Declare the variable here
+            
+                            switch (foodItem.toLowerCase()) {
+                                case 'meat curry':
+                                case 'curry':
+                                case 'gravy':
+                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317dfdaeabff71b2956_meat%20curry.svg';
+                                    break;
+                                case 'rice':
+                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317dfdaeabff71b2956_meat%20curry.svg';
+                                    break;
+                                case 'dal':
+                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038316f145b2e74599b0fe_dal.svg';
+                                    break;
+                                case 'sauce':
+                                case 'dressing':
+                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317623861f66264e74a_sauce.svg';
+                                    break;
+                                case 'dip':
+                                case 'condiment':
+                                case 'dressing':
+                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/650383179f830c92c94fbc56_condiment.svg';
+                                    break;
+                                case 'bread':
+                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317dfdaeabff71b2956_meat%20curry.svg';
+                                    break;
+                                case 'salad':
+                                case 'veggies':
+                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317dfdaeabff71b2956_meat%20curry.svg';
+                                    break;
 
+                                case 'pickle':
+                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c0bbbe2ea725ffb9b_pickle.svg';
+                                    break;
+                                case 'milk':
+                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c96969ba5745b6731_milk.svg';
+                                    break;
+                                case 'nuts':
+                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c0bbbe2ea725ffb77_nut.svg';
+                                    break;
+                                case 'full meal':
+                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65000a185219862012ed8b55_dinner.svg';
+                                    break;
+                                case 'snack':
+                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978ce3df317bd68f3498_snack.svg';
+                                    break;
+                                case 'fruit':
+                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c2feffa5e35e3e03a_fruit.svg';
+                                    break;
+                                case 'cheese':
+                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/650398da85853dfb8c2fbff2_cheese.svg';
+                                    break;
+                                case 'side dish':
+                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c3ae81612c6565e20_side%20dish.svg';
+                                    break;
+                                case 'curd':
+                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/650398bd6b5dac33a4984f96_curd.svg';
+                                    break;
+                                case 'roti':
+                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c6876380504a42795_roti.svg';
+                                    break;
+                                case 'meat':
+                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978cc284645ab4f956d3_meat.svg';
+                                    break;
 
-                            let pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65000c6dc5d37cacb456bd5e_rice.svg'
-
-
+                                default:
+                                    // Handle the case when none of the conditions match
+                                    break;
+                            }
+            
                             const pairedFoodItem = document.createElement('div');
                             pairedFoodItem.classList.add('food-pairing-item');
-                            pairedFoodItem.textContent = foodItem;
-
+            
                             const pairedFoodImage = document.createElement('div');
-                            pairedFoodImage.classList.add('pairedFoodImage');
-                            pairedFoodImage.backgroundImage =`url('${pairedImageIcon}')`;
-
-
+                            pairedFoodImage.classList.add('pairedfoodimage');
+                            pairedFoodImage.style.backgroundImage = `url('${pairedImageIcon}')`;
+            
+                            const pairedFoodName = document.createElement('div');
+                            pairedFoodName.classList.add('pairedFoodName');
+                            pairedFoodName.textContent = foodItem;
+            
                             pairedFoodItem.appendChild(pairedFoodImage);
+                            pairedFoodItem.appendChild(pairedFoodName);
+            
                             pairingRow.appendChild(pairedFoodItem);
                         });
             
                         // Append the priority and paired foods to the wrapper
-                        //pairingRow.appendChild(pairedFoodItem);
-                        
                         foodPairingWrapper.appendChild(pairingRow);
-                        
                     }
                 }
             }
             
             
             
-
+            
+            function showContainers() {
+                const cardContainers = document.querySelectorAll('.sr-p-grid');
+            
+                cardContainers.forEach((container) => {
+                    container.classList.remove('hide');
+                });
+            }
+            
             
            
             
@@ -547,6 +611,8 @@ function getFoodDetails() {
         updateNutrientValues('FAT', 'fat');
         updateNutrientValuesAbs('Glycemic Index Estimate','gi')
             
+
+        showContainers();
             //end
 
         }
