@@ -1,5 +1,3 @@
-//----------------------------- end of basic food details
-
 
 // Check if 'foodId' is a valid integer
 if (!isNaN(foodId) && Number.isInteger(parseFloat(foodId))) {
