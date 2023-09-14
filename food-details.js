@@ -565,6 +565,7 @@ function getFoodDetails() {
             
                 cardContainers.forEach((container) => {
                     container.classList.remove('hide');
+                    
                 });
             }
             
