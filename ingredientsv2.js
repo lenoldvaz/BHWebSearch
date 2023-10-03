@@ -38,7 +38,7 @@ function getIngredients() {
 
          
                 const ingredientsTable = document.getElementById('is_ingredients_div');
-                console.log(ingredientsTable);
+                //console.log(ingredientsTable);
             
                 // Sort the data array by basic_unit_measure in ascending order
                 data.sort((a, b) => b.basic_unit_measure - a.basic_unit_measure);
@@ -128,7 +128,7 @@ function getIngredients() {
             
                     let parent_group = group.parent_group;
                     let foodGroupIcon; // Declare the variable here
-                    console.log(parent_group)
+                    //console.log(parent_group)
 
                     switch (parent_group) {
                         case 'meats':
