@@ -4,6 +4,12 @@ function getUrlParameter(name) {
     return urlParams.get(name);
 }
 
+
+// Retrieve the value from local storage
+const servingType = localStorage.getItem('serving_type');
+
+
+
 // Get the 'id' parameter value from the current page URL
 const foodId = getUrlParameter('id');
 let food_url; // Declare the food_url variable in the outer scope
@@ -50,6 +56,10 @@ function getFoodDetails() {
             const foodName = document.getElementsByClassName('food-name')[0]
             foodName.textContent = data.food_name;
 
+
+            const breadcrumbs = document.querySelector('.breadcrumbs.currentsearch');
+            breadcrumbs.textContent = data.food_name;
+
             const foodDesc = document.getElementsByClassName('description')[0]
             foodDesc.textContent = data.food_description;
 
@@ -63,15 +73,16 @@ function getFoodDetails() {
             const foodTypeElement = document.querySelector('.food-type');
 
             // Clean the value by removing curly braces
+            if(data.food_tags.food_group) {
             const cleanedValue = data.food_tags.food_group.replace(/{|}/g, '');
-
+            
             // Check the cleaned value and set the background image accordingly
             if (cleanedValue === 'veg') {
                 foodTypeElement.style.backgroundImage = `url('${vegImageUrl}')`;
             } else if (cleanedValue === 'nonveg') {
                 foodTypeElement.style.backgroundImage = `url('${nonVegImageUrl}')`;
             }
-            
+        }
 
 
 
@@ -149,6 +160,10 @@ function getFoodDetails() {
             }
             
         }
+
+
+
+        
             
             // Function to calculate and update nutrient values
             function updateNutrientValues(nutrientName, nutrientClassName) {
@@ -347,12 +362,15 @@ function getFoodDetails() {
             function updateDisorders(disorders) {
             const disorderTable = document.querySelector('.card.disorders');
             //console.log('disorderTable', disorderTable);
-
+            const disorderDivTitle = document.querySelector('.disorder-div-title')
+            console.log(disorderTable)
 
             if (disorders.length === 0 ) {
                 disorderTable.classList.add('Hide')
-                document.querySelector('.disorder-div-title').classList.add('Hide')
+                disorderDivTitle.classList.add('Hide')
             } 
+                disorderDivTitle.textContent = 'Health Tags for '+data.foodName
+            
         
             for (const disorder of disorders) {
             // Create a new row for each disorder
