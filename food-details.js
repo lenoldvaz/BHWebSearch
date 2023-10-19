@@ -1,8 +1,29 @@
+// Function to capitalize the first letter of a string
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+
+
+
+
+
+//function to check for empty objects
+function isEmptyObject(obj) {
+    return Object.keys(obj).length === 0 && obj.constructor === Object;
+}
+
+
+
+
 // Define a function to get the value of a URL parameter by its name
 function getUrlParameter(name) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(name);
 }
+
+
+
 
 // Get the 'id' parameter value from the current page URL
 const foodId = getUrlParameter('id');
@@ -12,7 +33,8 @@ let ingredient_url;
 // Check if 'foodId' is a valid integer
 if (!isNaN(foodId) && Number.isInteger(parseFloat(foodId))) {
     // Construct the food_url with the extracted 'id' value
-    food_url = new URL(`https://node.lenoldvaz.com/bh/search-food?id=${foodId}`);
+    //food_url = new URL(`https://node.lenoldvaz.com/bh/search-food?id=${foodId}`);
+    food_url = new URL(`https://api.bonhappetee.com/food?food_item_id=${foodId}`);
     ingredient_url = new URL(`https://node.lenoldvaz.com/bh/ingredients?id=${foodId}`);
     // The rest of your code to make the API request and process the response
     // ...
@@ -34,6 +56,7 @@ function getFoodDetails() {
 
     // Set the Content-Type header for JSON data
     request.setRequestHeader("Accept", "application/json");
+    request.setRequestHeader("x-api-key", "06220486a7216a9ead5fa6a9a5f4f82c");
 
     // When the 'request' or API request loads, do the following...
     request.onload = function() {
@@ -43,210 +66,317 @@ function getFoodDetails() {
         // Status 200 = Success. Status 400 = Problem. This says if it's successful and no problems, then execute 
         if (request.status >= 200 && request.status < 400) {
 
+            //define global variables 
 
 
 
-            function updateBasicDetails(){
-            const foodName = document.getElementsByClassName('food-name')[0]
-            foodName.textContent = data.food_name;
+            //Unit measure (basic unit measure / calories calculated for)
+            const basicUnitMeasure = data.measures.filter(a => a.default_measure == 't')[0].basic_unit_measure
+            const unit_option_name = data.measures.filter(a => a.default_measure == 't')[0].unit_option_name
+            const calories_calculated_for = data.calories_calculated_for
+            const measure_ratio = basicUnitMeasure/calories_calculated_for
+            
 
-            const foodDesc = document.getElementsByClassName('description')[0]
-            foodDesc.textContent = data.food_description;
+            
+            //Energy Kcal  
+            // Find the 'Energy_kcal' nutrient in the 'data.nutrition' array
+              const energyKcalNutrient = data.nutrition.find(n => n.nutrient_name === 'Energy_kcal');
+             
+            
+              // Extract the 'measure' value for 'Energy_kcal', rounded to 2 decimal places, default to 0 if not found
+              window.energyKcalMeasure = energyKcalNutrient ? energyKcalNutrient.measure.toFixed(0) : 0;
+          
+              // Calculate the total calories based on 'Energy_kcal' measure
+              const total_calories = energyKcalMeasure;
+            console.log('calories',total_calories )
 
-
-
-            // Assuming you have image URLs for veg and nonveg
-            const vegImageUrl = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/64e4d43508527271a013fd3c_vegan.svg';
-            const nonVegImageUrl = 'path-to-nonveg-image.jpg';
-
-            // Get the element with the class 'food-type'
-            const foodTypeElement = document.querySelector('.food-type');
-
-            // Clean the value by removing curly braces
-            const cleanedValue = data.food_tags.food_group.replace(/{|}/g, '');
-
-            // Check the cleaned value and set the background image accordingly
-            if (cleanedValue === 'veg') {
-                foodTypeElement.style.backgroundImage = `url('${vegImageUrl}')`;
-            } else if (cleanedValue === 'nonveg') {
-                foodTypeElement.style.backgroundImage = `url('${nonVegImageUrl}')`;
-            }
             
 
 
 
-
-
-            //Food tags 
-            const foodTagsListDiv = document.querySelector('.pill-wrapper')
-            const foodTagsToCheck = ['meal_type', 'cuisines'];
-
-            //iterate through the tags 
-            for (const tagKey of foodTagsToCheck) {
-                const tagValue = data.food_tags[tagKey]
-
-
-
-                if (tagValue) {
-                    // Remove surrounding curly braces and split terms by comma
-                    const foodtagTerms = tagValue.replace(/[{}]/g, '').split(',');
-                    
-
-                    for (const food_tags of foodtagTerms) {
-                        const foodTagsPillDiv = document.createElement('div');
-                        foodTagsPillDiv.classList.add('pill');
-                        
-
-                        const foodTagsText = document.createElement('div');
-                        foodTagsText.classList.add('pill-text')
-                        foodTagsText.textContent = food_tags
-
-                        foodTagsListDiv.appendChild(foodTagsPillDiv);
-
-                        foodTagsPillDiv.appendChild(foodTagsText)
-
+            function updateBasicDetails() {
+                const foodName = document.querySelector('.food-name');
+                foodName.textContent = capitalizeFirstLetter(data.food_name);
+            
+                const breadcrumbs = document.querySelector('.breadcrumbs.currentsearch');
+                breadcrumbs.textContent = data.food_name;
+            
+                const veganImageUrl = 'url(https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/64e4d43508527271a013fd3c_vegan.svg)';
+                const nonVegImageUrl = 'url(https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/651b6918ea2f99f601cc8242_NV.svg)';
+                const vegImageUrl = 'url(https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/651b6917f26228fb962b6b94_VEG.svg)';
+                const eggImageUrl = 'url(https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/651b69195b7d5a1686616187_Egg.svg)';
+                const foodTypeElement = document.querySelector('.food-type');
+                
+                if (data.food_tags.food_group) {
+                    const cleanedValue = data.food_tags.food_group.replace(/{|}/g, '');
+                    switch (cleanedValue) {
+                        case 'veg':
+                            foodTypeElement.style.backgroundImage = vegImageUrl;
+                            break;
+                        case 'vegan':
+                            foodTypeElement.style.backgroundImage = veganImageUrl;
+                            break;
+                        case 'nonveg':
+                            foodTypeElement.style.backgroundImage = nonVegImageUrl;
+                            break;
+                        case 'egg':
+                            foodTypeElement.style.backgroundImage = eggImageUrl;
+                            break;
                     }
+                }
+                
+            
+                const foodTagsDiv = document.querySelector('.foodtagsdiv');
+                if (isEmptyObject(data.food_tags)) {
+                    foodTagsDiv.classList.add('hide');
+                } else {
+                    const foodTagsListDiv = document.querySelector('.pill-wrapper');
+                    const foodTagsToCheck = ['meal_type', 'cuisines'];
+            
+                    for (const tagKey of foodTagsToCheck) {
+                        const tagValue = data.food_tags[tagKey];
+            
+                        if (tagValue) {
+                            const foodtagTerms = tagValue.replace(/[{}]/g, '').split(',');
+                           // console.log(tagKey, foodtagTerms)
+            
+                            switch (tagKey) {
+                                case 'meal_type':
+                                    for (const foodTag of foodtagTerms) {
+                                        const foodTagsPillDiv = document.createElement('div');
+                                        foodTagsPillDiv.classList.add('pill');
+            
+                                        const foodTagsText = document.createElement('div');
+                                        foodTagsText.classList.add('pill-text');
+                                        foodTagsText.textContent = capitalizeFirstLetter(foodTag);
+            
+                                        foodTagsPillDiv.appendChild(foodTagsText);
+                                        foodTagsListDiv.appendChild(foodTagsPillDiv);
+                                    }
+                                    break;
+                                case 'cuisines':
+                                   
+                                        const foodDesc = document.querySelector('.description');
+                                        const cuisinesArray = foodtagTerms.map(cuisine => capitalizeFirstLetter(cuisine.trim()));
+                                        foodDesc.textContent = cuisinesArray.join(', ');
+                                    
+                                    
+                                    
+                                    break;
+                            }
+                        }
+                    }
+                }
+            
+                const weight = document.querySelector('.serving-size-weight');
 
-                }   
-
+                
+            
+                if (basicUnitMeasure === null) {
+                    if (weight) {
+                        weight.classList.add('hide');
+                    }
+                } else {
+                    if (weight) {
+                        weight.classList.remove('hide');
+                        const weightText = weight.querySelector('.serving-size-weight-text');
+                        weightText.textContent = Math.floor(basicUnitMeasure) + 'g';
+                    }
+                }
+            
+                const recipe_link = document.querySelector('.recipe-link');
+            
+                if (data.recipe_link === null) {
+                    if (recipe_link) {
+                        recipe_link.classList.add('hide');
+                    }
+                } else {
+                    if (recipe_link) {
+                        recipe_link.href = data.recipe_link;
+                    }
+                }
             }
+            
+            
+            // Function to update nutrient values
+            function updateNutrientValues(nutrientName, nutrientClassName) {
+                // Find the nutrient in the 'data.nutrition' array
+                const nutrient = data.nutrition.find(n => n.nutrient_tag_name === nutrientName);
+            
+                // Extract the 'measure' value for the nutrient, default to 0 if not found
+                const nutrientMeasure = nutrient ? nutrient.measure : 0;
+                console.log(nutrientName,nutrientMeasure)
+              
+            
+                // Find the meter-fill and meter-text elements with the specified class
+                const meterFillNutrient = document.querySelector(`.meter-fill.${nutrientClassName}`);
+                const meterTextNutrient = document.querySelector(`.macro-title-count.left.${nutrientClassName}`);
+            
+                if (meterFillNutrient) {
+                if (nutrient && energyKcalNutrient) {
+                    // Calculate the width based on nutrient measure * 9 (for 'fat') or * 4 (for others) divided by total_calories
+                    let widthValue;
+            
+                    if (nutrientClassName === 'fat') {
+                    widthValue = (nutrientMeasure * 9) / (total_calories);
+                    } else {
+                    widthValue = (nutrientMeasure * 4) / (total_calories);
+                    }
+            
+                    // Set the width of the meter-fill element as a percentage
+                    meterFillNutrient.style.width = `${widthValue * 100}%`;
+            
+                    // Set the text content of the meter-text element with 2 decimal places
+                    meterTextNutrient.textContent = `${(widthValue * 100).toFixed(2)}%`;
+            
+                    // Set a global variable with a unique name for widthValue
+                    window[`widthValue${nutrientClassName}`] = widthValue;
+            
+                    // Log for debugging (you can uncomment this if needed)
+                     console.log(`widthValue${nutrientClassName}`, widthValue * 100);
+                }
+                }
+                
+            }
+  
 
-
+            function updateNutrientValuesAbs(nutrientName, nutrientClassName) {
+                // Find the nutrient in the 'data.nutrition' array
+                const nutrient = data.nutrition.find(n => n.nutrient_tag_name === nutrientName);
+              
+                // Extract the 'measure' value for the nutrient, default to 0 if not found
+                const nutrientMeasure = nutrient ? nutrient.measure : 0;
+                
+              
+                // Find the meter-fill and meter-text elements with the specified class
+                const meterFillNutrient = document.querySelector(`.meter-fill.${nutrientClassName}`);
+                const meterTextNutrient = document.querySelector(`.macro-title-count.${nutrientClassName}`);
+              
+                if (meterFillNutrient) {
+                  if (nutrient) {
+                    // Calculate the width based on nutrient measure
+                    const widthValue = nutrientMeasure;
+              
+                    // Set the width of the meter-fill element
+                    meterFillNutrient.style.width = `${widthValue}%`;
+              
+                    // Set the text content of the meter-text element as the rounded value
+                    meterTextNutrient.textContent = `${Math.floor(widthValue)}`;
+                  }
+                }
+              
+                // Create a donut chart with the provided values
+                createDonutChart(
+                  widthValueprotein * 100,
+                  widthValuecarbs * 100,
+                  widthValuefat * 100,
+                  (energyKcalMeasure*measure_ratio).toFixed(0)
+                );
+                console.log({
+                    "protein": widthValueprotein,
+                    "carbs": widthValuecarbs,
+                    "fat":widthValuefat
+                } )
+              }
+              
+              // Get the canvas element by its id and create a donut chart
+              function createDonutChart(p, c, f, k) {
+                var ctx = document.getElementById('donutChart').getContext('2d');
+              
+                // Data for the chart
+                var data = {
+                  labels: ['Protein', 'Carbs', 'Fat'],
+                  datasets: [
+                    {
+                      label: '% of Calories',
+                      data: [p, c, f],
+                      backgroundColor: ['#4C5EE7', '#907AD6', '#5299D3'],
+                    },
+                  ],
+                };
+              
+                const centerText = {
+                  id: 'centerText',
+                  afterDatasetsDraw(chart, args, pluginOptions) {
+                    const { ctx } = chart;
+              
+                    ctx.save();
+                    const textX = chart.getDatasetMeta(0).data[0].x;
+                    const textY = chart.getDatasetMeta(0).data[0].y;
+              
+                    ctx.font = 'bold 22px sans-serif';
+                    ctx.textBaseline = 'middle';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(k, textX, textY - 10); // Display 'k' on the first line
+                    ctx.fillText('Kcal', textX, textY + 10); // Display 'Kcal' on the second line
+                  },
+                };
+              
+                // Configuration options for the chart
+                var options = {
+                  cutout: 80,
+                  legend: false,
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
+                  },
+                };
+              
+                // Create the donut chart
+                var myDonutChart = new Chart(ctx, {
+                  type: 'doughnut',
+                  data: data,
+                  options: options,
+                  plugins: [centerText],
+                });
+              }
+              
 
            
             
             
             
-            // Serving size 
-            const weight = document.querySelector('.serving-size-weight');
-
-            if (data.calories_calculated_for === null) {
-                if (weight) {
-                    weight.classList.add('Hide');
-                }
-            } else {
-                if (weight) {
-                    // Show the div by removing the 'Hide' class
-                    weight.classList.remove('Hide');
-
-                    // Update the text content of the serving-size-weight-text element
-                    const weightText = weight.querySelector('.serving-size-weight-text');
-                    weightText.textContent = data.calories_calculated_for;
-                }
-            }
+     
             
-               //recipe link 
-            const recipe_link = document.querySelector('.recipe-link');
-
-            if (data.recipe_link === null) {
-                if (recipe_link) {
-                    recipe_link.classList.add('Hide');
-                }
-            } else {
-                if (recipe_link) {
-                    recipe_link.href = data.recipe_link;
-                }
-            }
-            
-        }
-            
-            // Function to calculate and update nutrient values
-            function updateNutrientValues(nutrientName, nutrientClassName) {
-
-
-            // Find the nutrient in the 'data.nutrition' array
-            const nutrient = data.nutrition.find(nutrient => nutrient.nutrient_tag_name === nutrientName);
-               
-            // Extract the 'measure' value for the nutrient
-            const nutrientMeasure = nutrient ? nutrient.measure : 0;
-                
-
-
-            // Find the 'Energy_kcal' nutrient in the 'data.nutrition' array
-            const energyKcalNutrient = data.nutrition.find(nutrient => nutrient.nutrient_name === 'Energy_kcal');
-            // Extract the 'measure' value for 'Energy_kcal'
-            const energyKcalMeasure = energyKcalNutrient ? energyKcalNutrient.measure : 0;
-
-            // Calculate the total_calories
-            const total_calories = energyKcalMeasure;
-
-
-
-
-
-            // Find the element with the specified combo class
-            const meterFillNutrient = document.querySelector(`.meter-fill.${nutrientClassName}`);
-            const meterTextNutrient = document.querySelector(`.macro-title-count.left.${nutrientClassName}`);
-               
-
-
-
-            if (meterFillNutrient) {
-                if (nutrient && energyKcalNutrient) {
-                    // Calculate the width based on nutrient measure * 4 divided by total_calories
-                    const widthValue = (nutrientMeasure * 4) / total_calories;
-                    
-                    // Set the width of the meter-fill element based on the calculated value
-                    meterFillNutrient.style.width = `${widthValue * 100}%`; // Convert to percentage
-                    meterTextNutrient.textContent = `${(widthValue *100).toFixed(2)}%`; // Round to 2 decimal places
-
-
-                }
-            }
-            }
-
-            function updateNutrientValuesAbs(nutrientName, nutrientClassName) {
-             // Find the nutrient in the 'data.nutrition' array
-             const nutrient = data.nutrition.find(nutrient => nutrient.nutrient_tag_name === nutrientName);
-             
-            // Extract the 'measure' value for the nutrient
-            const nutrientMeasure = nutrient ? nutrient.measure : 0;
-                
-
-
-                // Find the element with the specified combo class
-            const meterFillNutrient = document.querySelector(`.meter-fill.${nutrientClassName}`);
-            const meterTextNutrient = document.querySelector(`.macro-title-count.${nutrientClassName}`);
-               
-
-                if (meterFillNutrient) {
-                    if (nutrient) {
-                        // Calculate the width based on nutrient measure * 4 divided by total_calories
-                        const widthValue = nutrientMeasure ;
-                        
-                        // Set the width of the meter-fill element based on the calculated value
-                        meterFillNutrient.style.width = `${widthValue}%`; // Convert to percentage
-                        meterTextNutrient.textContent = `${Math.floor(widthValue)}`; //Rounds to the nearest integer
-    
-    
-                    }
-                }
-
-
-            }
 
 
             //Construct a function to display nutrition values 
-            function updateNutriTableValues(nutrientName, nutrientClassName, rda_value) {
-            // Find the nutrient in the 'data.nutrition' array
-            const nutrient = data.nutrition.find(nutrient => nutrient.nutrient_tag_name === nutrientName);
-            //console.log('nutrient', nutrient)
+            function updateNutriTableValues(nutrientName, nutrientClassName, rda_value, measure_name) {
+
+                
 
 
-            // Extract the 'measure' value for the nutrient
-            const nutrientMeasure = nutrient ? nutrient.measure : 0;
-                //console.log('nutrientMeasure', nutrientMeasure)
 
-            // Find the element with the specified combo class
-            
-            const nutriTableCellText = document.querySelector(`.table_row_text.right.${nutrientClassName}`);
-            
+                // Find the nutrient in the 'data.nutrition' array
+                const nutrient = data.nutrition.find(nutrient => nutrient.nutrient_tag_name === nutrientName);
+                //console.log('nutrient', nutrient)
 
-            if(nutriTableCellText) {
-                // Calculate daily value as a percentage of RDA
-                const dailyValue = (nutrientMeasure / rda_value) * 100;
-                nutriTableCellText.textContent = `${dailyValue.toFixed(2)}%`; // Display as a percentage with 2 decimal places
-            }
+
+
+                // Extract the 'measure' value for the nutrient
+                const nutrientMeasure = nutrient ? ((nutrient.measure)*measure_ratio).toFixed(2) : 0;
+                    //console.log('nutrientMeasure', nutrientMeasure)
+
+                // Find the element with the specified combo class
+                
+                const nutriTableCellText = document.querySelector(`.table_row_text.right.${nutrientClassName}`);
+                const nutriTableGramWeightText = document.querySelector(`.table_row_text.${nutrientClassName}`)
+
+                if(nutriTableCellText && nutrientClassName !== 'kcal' && nutrientClassName !== 'serving') {
+                    // Calculate daily value as a percentage of RDA
+                    const dailyValue = rda_value === 0 ? "NA" : ((nutrientMeasure / rda_value) * 100).toFixed(2) + "%";
+                    nutriTableCellText.textContent = dailyValue;
+                    
+                    //nutriTableGramWeightText.innerHTML += `<span style="font-weight: bold"> ${nutrientMeasure}g</span>`;
+                    nutriTableGramWeightText.innerHTML = `${nutriTableGramWeightText.textContent}<span style="font-family: Gilroy Regular, sans-serif; font-size:16px;">  ${nutrientMeasure}${measure_name}</span>`;
+
+
+                } else if (nutriTableCellText && nutrientClassName == 'kcal'){
+                    nutriTableCellText.textContent = (total_calories*measure_ratio).toFixed(0) + " " + capitalizeFirstLetter(nutrientClassName);
+                } else {
+                    nutriTableCellText.textContent = capitalizeFirstLetter(nutrientName)
+                }
 
 
 
@@ -339,25 +469,30 @@ function getFoodDetails() {
                         // Append the health tag pill div to the health tag list
                         healthTagList.appendChild(healthtagPillDiv);
                     }
+                } else {
+                    const healthTagDiv = document.querySelector('.foodtagsdiv')
+                    healthTagDiv.classList.add('hide')
                 }
             }
             }
 
-        
             function updateDisorders(disorders) {
-            const disorderTable = document.querySelector('.card.disorders');
-            //console.log('disorderTable', disorderTable);
-
-
-            if (disorders.length === 0 ) {
-                disorderTable.classList.add('Hide')
-                document.querySelector('.disorder-div-title').classList.add('Hide')
-            } 
+                const disorderTable = document.querySelector('.card.disorders');
+                //console.log('disorderTable', disorderTable);
+                const disorderDivTitle = document.querySelector('.disorder-div-title')
+                console.log(disorderTable)
+    
+                if (disorders.length === 0 ) {
+                    disorderTable.classList.add('Hide')
+                    disorderDivTitle.classList.add('Hide')
+                } 
+                    disorderDivTitle.textContent = 'Health Tags for '+capitalizeFirstLetter(data.food_name)
+                
         
             for (const disorder of disorders) {
             // Create a new row for each disorder
             const disorderRow = document.createElement('div');
-            disorderRow.classList.add('table_content_row');
+            disorderRow.classList.add('table_content_row','is_disorders');
         
             // Create the cells
         
@@ -445,117 +580,158 @@ function getFoodDetails() {
             function updateFoodPairing(pairings) {
                 const foodPairingWrapper = document.querySelector('.food-pairing-wrapping');
                 let index = 1;
-            
-                for (const priorityKey in pairings) {
-                    // Create a row 
-                    const pairingRow = document.createElement('div');
-                    pairingRow.classList.add('food-pairing-row');
-            
-                    if (pairings.hasOwnProperty(priorityKey)) {
-                        const priorityFoods = pairings[priorityKey];
-            
-                        // Create a div for the priority
-                        const priorityDiv = document.createElement('div');
-                        priorityDiv.classList.add('food-pairing-priority-text');
-                        priorityDiv.textContent = index.toString();
-                        index++;
-            
-                        pairingRow.appendChild(priorityDiv);
-            
-                        // Iterate through the foods in this priority
-                        priorityFoods.forEach((foodItem) => {
-                            let pairedImageIcon; // Declare the variable here
-            
-                            switch (foodItem.toLowerCase()) {
-                                case 'meat curry':
-                                case 'curry':
-                                case 'gravy':
-                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317dfdaeabff71b2956_meat%20curry.svg';
-                                    break;
-                                case 'rice':
-                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317dfdaeabff71b2956_meat%20curry.svg';
-                                    break;
-                                case 'dal':
-                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038316f145b2e74599b0fe_dal.svg';
-                                    break;
-                                case 'sauce':
-                                case 'dressing':
-                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317623861f66264e74a_sauce.svg';
-                                    break;
-                                case 'dip':
-                                case 'condiment':
-                                case 'dressing':
-                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/650383179f830c92c94fbc56_condiment.svg';
-                                    break;
-                                case 'bread':
-                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317dfdaeabff71b2956_meat%20curry.svg';
-                                    break;
-                                case 'salad':
-                                case 'veggies':
-                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317dfdaeabff71b2956_meat%20curry.svg';
-                                    break;
 
-                                case 'pickle':
-                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c0bbbe2ea725ffb9b_pickle.svg';
-                                    break;
-                                case 'milk':
-                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c96969ba5745b6731_milk.svg';
-                                    break;
-                                case 'nuts':
-                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c0bbbe2ea725ffb77_nut.svg';
-                                    break;
-                                case 'full meal':
-                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65000a185219862012ed8b55_dinner.svg';
-                                    break;
-                                case 'snack':
-                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978ce3df317bd68f3498_snack.svg';
-                                    break;
-                                case 'fruit':
-                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c2feffa5e35e3e03a_fruit.svg';
-                                    break;
-                                case 'cheese':
-                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/650398da85853dfb8c2fbff2_cheese.svg';
-                                    break;
-                                case 'side dish':
-                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c3ae81612c6565e20_side%20dish.svg';
-                                    break;
-                                case 'curd':
-                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/650398bd6b5dac33a4984f96_curd.svg';
-                                    break;
-                                case 'roti':
-                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c6876380504a42795_roti.svg';
-                                    break;
-                                case 'meat':
-                                    pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978cc284645ab4f956d3_meat.svg';
-                                    break;
 
-                                default:
-                                    // Handle the case when none of the conditions match
-                                    break;
+                // Check if pairings is undefined or null
+                if (pairings === undefined || pairings === null) {
+                // Handle the case when pairings is undefined or null
+                const divBlock10 = document.querySelector('.food-pairing-wrapper');
+                if (divBlock10) {
+                    divBlock10.classList.add('Hide');
+                }
+                } else {
+                    // Continue with the rest of the code if pairings is an object
+                    for (const priorityKey in pairings) {
+                        // ... (rest of the code remains the same)
+                    }
+        
+                
+                    // Check if data.food_pairings is empty (an empty object)
+                    if (Object.keys(pairings).length === 0 && pairings.constructor === Object) {
+                        const divBlock10 = document.querySelector('.food-pairing-wrapper');
+                        if (divBlock10) {
+                            divBlock10.classList.add('Hide');
+                        }
+                    } else {
+                        for (const priorityKey in pairings) {
+                            // Create a row
+                            const pairingRow = document.createElement('div');
+                            pairingRow.classList.add('food-pairing-row');
+                
+                            if (pairings.hasOwnProperty(priorityKey)) {
+                                const priorityFoods = pairings[priorityKey];
+                
+                                // Create a div for the priority
+                                const priorityDiv = document.createElement('div');
+                                priorityDiv.classList.add('food-pairing-priority-text');
+                                priorityDiv.textContent = index.toString();
+                                index++;
+                
+                                pairingRow.appendChild(priorityDiv);
+                
+                                // create a container for the foods-items
+                                const foodPairingItemContainer = document.createElement('div');
+                                foodPairingItemContainer.classList.add('foodpairingitemcontainer');
+                
+                                pairingRow.appendChild(foodPairingItemContainer);
+
+                                 // Iterate through the foods in this priority, limiting to the first 2 items
+                                const foodsToShow = priorityFoods.slice(0, 2);
+                
+                                // Iterate through the foods in this priority
+                                foodsToShow.forEach((foodItem) => {
+                                    let pairedImageIcon; // Declare the variable here
+                
+                                    switch (foodItem.toLowerCase()) {
+                                        case 'meat curry':
+                                            case 'curry':
+                                            case 'gravy':
+                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317dfdaeabff71b2956_meat%20curry.svg';
+                                                break;
+                                            case 'rice':
+                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317dfdaeabff71b2956_meat%20curry.svg';
+                                                break;
+                                            case 'dal':
+                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038316f145b2e74599b0fe_dal.svg';
+                                                break;
+                                            case 'sauce':
+                                            case 'dressing':
+                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317623861f66264e74a_sauce.svg';
+                                                break;
+                                            case 'dip':
+                                            case 'condiment':
+                                            case 'dressing':
+                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/650383179f830c92c94fbc56_condiment.svg';
+                                                break;
+                                            case 'bread':
+                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317dfdaeabff71b2956_meat%20curry.svg';
+                                                break;
+                                            case 'salad':
+                                            case 'veggies':
+                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317dfdaeabff71b2956_meat%20curry.svg';
+                                                break;
+            
+                                            case 'pickle':
+                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c0bbbe2ea725ffb9b_pickle.svg';
+                                                break;
+                                            case 'milk':
+                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c96969ba5745b6731_milk.svg';
+                                                break;
+                                            case 'nuts':
+                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c0bbbe2ea725ffb77_nut.svg';
+                                                break;
+                                            case 'full meal':
+                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65000a185219862012ed8b55_dinner.svg';
+                                                break;
+                                            case 'snack':
+                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978ce3df317bd68f3498_snack.svg';
+                                                break;
+                                            case 'fruit':
+                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c2feffa5e35e3e03a_fruit.svg';
+                                                break;
+                                            case 'cheese':
+                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/650398da85853dfb8c2fbff2_cheese.svg';
+                                                break;
+                                            case 'side dish':
+                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c3ae81612c6565e20_side%20dish.svg';
+                                                break;
+                                            case 'curd':
+                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/650398bd6b5dac33a4984f96_curd.svg';
+                                                break;
+                                            case 'roti':
+                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c6876380504a42795_roti.svg';
+                                                break;
+                                            case 'meat':
+                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978cc284645ab4f956d3_meat.svg';
+                                                break;
+            
+                                            default:
+                                                // Handle the case when none of the conditions match
+                                                break;
+                                    }
+                
+                                    const pairedFoodItem = document.createElement('div');
+                                    pairedFoodItem.classList.add('food-pairing-item');
+                
+                                    const pairedFoodImage = document.createElement('div');
+                                    pairedFoodImage.classList.add('pairedfoodimage');
+                                    pairedFoodImage.style.backgroundImage = `url('${pairedImageIcon}')`;
+                
+                                    const pairedFoodName = document.createElement('div');
+                                    pairedFoodName.classList.add('pairedfoodname');
+                                    pairedFoodName.textContent = foodItem;
+                
+                                    pairedFoodItem.appendChild(pairedFoodImage);
+                                    pairedFoodItem.appendChild(pairedFoodName);
+                
+                                    foodPairingItemContainer.appendChild(pairedFoodItem);
+                                    
+                                    // Append "OR" text unless it's the last item
+                                    if (index < foodsToShow.length - 1) {
+                                        const orText = document.createTextNode(' OR ');
+                                        foodPairingItemContainer.appendChild(orText);
+                                    }
+
+                                });
+                
+                                // Append the priority and paired foods to the wrapper
+                                foodPairingWrapper.appendChild(pairingRow);
                             }
-            
-                            const pairedFoodItem = document.createElement('div');
-                            pairedFoodItem.classList.add('food-pairing-item');
-            
-                            const pairedFoodImage = document.createElement('div');
-                            pairedFoodImage.classList.add('pairedfoodimage');
-                            pairedFoodImage.style.backgroundImage = `url('${pairedImageIcon}')`;
-            
-                            const pairedFoodName = document.createElement('div');
-                            pairedFoodName.classList.add('pairedFoodName');
-                            pairedFoodName.textContent = foodItem;
-            
-                            pairedFoodItem.appendChild(pairedFoodImage);
-                            pairedFoodItem.appendChild(pairedFoodName);
-            
-                            pairingRow.appendChild(pairedFoodItem);
-                        });
-            
-                        // Append the priority and paired foods to the wrapper
-                        foodPairingWrapper.appendChild(pairingRow);
+                        }
                     }
                 }
             }
+            
             
             
             
@@ -571,7 +747,11 @@ function getFoodDetails() {
             
             
            
-            
+
+
+
+
+        
 
 
 
@@ -596,22 +776,31 @@ function getFoodDetails() {
         
 
         //Update Nutrition table. You can change the rda values here 
-        updateNutriTableValues('FAT', 'fat', 55)
-        updateNutriTableValues('FASAT', 'fasat', 20)
-        updateNutriTableValues('FATRN', 'fatrn', 1)
-        //updateNutriTableValues('FASAT', 'fat', 6)
-        //updateNutriTableValues('FASAT', 'fat', 28)
-        updateNutriTableValues('CHOLE', 'chole', 300)
-        updateNutriTableValues('NA', 'na', 2000)
-        //updateNutriTableValues('FASAT', 'fat', 30)
+        updateNutriTableValues(unit_option_name+' ('+basicUnitMeasure+'g)','serving',0,"")
+        updateNutriTableValues('ENERC_KCAL', 'kcal', 2000, 'kcal')
+        updateNutriTableValues('FAT', 'fat', 55, 'g')
+        updateNutriTableValues('FASAT', 'fasat', 20, 'g')
+        updateNutriTableValues('FATRN', 'fatrn', 1, 'g')
+        updateNutriTableValues('FAMS', 'fams', 28, 'g')
+        updateNutriTableValues('FAPU', 'fapu', 6, 'g')
+        updateNutriTableValues('CHOLE', 'chole', 300, 'g')
+        updateNutriTableValues('CHOCDF', 'carbs', 130, 'g')
+        updateNutriTableValues('FIBTG', 'fibtg', 30, 'g')
+        updateNutriTableValues('SUGAR', 'sugar', 0, 'g') //sugar
+        updateNutriTableValues('Added Sugar', 'ad-sugar', 25, 'g') //added sugar
+        updateNutriTableValues('PROCNT', 'procnt', 54, 'g')
+        updateNutriTableValues('NA', 'na', 2000, 'mg')
 
 
         // Update nutrient values for different nutrient types
+        
         updateNutrientValues('PROCNT', 'protein');
         updateNutrientValues('CHOCDF', 'carbs');
         updateNutrientValues('FAT', 'fat');
         updateNutrientValuesAbs('Glycemic Index Estimate','gi')
-            
+        
+        
+         
 
         showContainers();
             //end
