@@ -23,9 +23,6 @@ function getUrlParameter(name) {
 }
 
 
-
-
-
 // Get the 'id' parameter value from the current page URL
 const foodId = getUrlParameter('id');
 let food_url; // Declare the food_url variable in the outer scope
