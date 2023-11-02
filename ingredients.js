@@ -140,7 +140,8 @@ function getIngredients() {
                             let parent_group = group.parent_group;
                             let foodGroupIcon; // Declare the variable here
                             //console.log(parent_group)
-
+ 
+                            
                             switch (parent_group) {
                                 case 'meats':
                                 case 'white lean meat':

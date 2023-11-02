@@ -71,6 +71,7 @@ function getFoodSearchResults() {
             const cardContainer = document.getElementById("sr-container");
 
            
+            
 
             // Iterate through the food results
             data.items.forEach(food => {
