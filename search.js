@@ -106,12 +106,12 @@ function getFoodSearchResults() {
                 card.addEventListener('click', function () {
                    
 
-                // Save a value to local storage
-                localStorage.setItem('serving_type', servingType);
+                // // Save a value to local storage
+                // localStorage.setItem('serving_type', servingType);
 
-                // Retrieve the saved value from local storage
-                const servingType = localStorage.getItem('serving_type');
-                console.log(servingType); // This will log the retrieved value
+                // // Retrieve the saved value from local storage
+                // const servingType = localStorage.getItem('serving_type');
+                // console.log(servingType); // This will log the retrieved value
 
 
                 document.location.href = "/food-search/search-results?id=" + food.food_id;
