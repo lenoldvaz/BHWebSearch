@@ -89,7 +89,7 @@ function getFoodDetails() {
           
               // Calculate the total calories based on 'Energy_kcal' measure
               const total_calories = energyKcalMeasure;
-            console.log('calories',total_calories )
+           // console.log('calories',total_calories )
 
             
 
@@ -206,7 +206,7 @@ function getFoodDetails() {
             
                 // Extract the 'measure' value for the nutrient, default to 0 if not found
                 const nutrientMeasure = nutrient ? nutrient.measure : 0;
-                console.log(nutrientName,nutrientMeasure)
+                //console.log(nutrientName,nutrientMeasure)
               
             
                 // Find the meter-fill and meter-text elements with the specified class
@@ -234,7 +234,7 @@ function getFoodDetails() {
                     window[`widthValue${nutrientClassName}`] = widthValue;
             
                     // Log for debugging (you can uncomment this if needed)
-                     console.log(`widthValue${nutrientClassName}`, widthValue * 100);
+                    // console.log(`widthValue${nutrientClassName}`, widthValue * 100);
                 }
                 }
                 
@@ -344,7 +344,7 @@ function getFoodDetails() {
 
             //Construct a function to display nutrition values 
             function updateNutriTableValues(nutrientName, nutrientClassName, rda_value, measure_name) {
-
+                console.log(nutrientName)
                 
 
 
@@ -357,7 +357,7 @@ function getFoodDetails() {
 
                 // Extract the 'measure' value for the nutrient
                 const nutrientMeasure = nutrient ? ((nutrient.measure)*measure_ratio).toFixed(2) : 0;
-                    //console.log('nutrientMeasure', nutrientMeasure)
+                   // console.log('nutrientMeasure', nutrientMeasure)
 
                 // Find the element with the specified combo class
                 
@@ -375,7 +375,9 @@ function getFoodDetails() {
 
                 } else if (nutriTableCellText && nutrientClassName == 'kcal'){
                     nutriTableCellText.textContent = (total_calories*measure_ratio).toFixed(0) + " " + capitalizeFirstLetter(nutrientClassName);
-                } else {
+                }
+                
+                else {
                     nutriTableCellText.textContent = capitalizeFirstLetter(nutrientName)
                 }
 
@@ -481,7 +483,7 @@ function getFoodDetails() {
                 const disorderTable = document.querySelector('.card.disorders');
                 //console.log('disorderTable', disorderTable);
                 const disorderDivTitle = document.querySelector('.disorder-div-title')
-                console.log(disorderTable)
+                //console.log(disorderTable)
     
                 if (disorders.length === 0 ) {
                     disorderTable.classList.add('Hide')
@@ -777,7 +779,7 @@ function getFoodDetails() {
         
 
         //Update Nutrition table. You can change the rda values here 
-        updateNutriTableValues(unit_option_name+' ('+basicUnitMeasure+'g)','serving',0,"")
+        updateNutriTableValues((unit_option_name == 'number' ? 1 : unit_option_name)+' ('+basicUnitMeasure.toFixed(2)+'g)','serving',0,"")
         updateNutriTableValues('ENERC_KCAL', 'kcal', 2000, 'kcal')
         updateNutriTableValues('FAT', 'fat', 55, 'g')
         updateNutriTableValues('FASAT', 'fasat', 20, 'g')
