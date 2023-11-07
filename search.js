@@ -85,7 +85,7 @@ function getFoodSearchResults() {
                 // Update card content with food details
                 const foodName = card.getElementsByClassName('sr-food-name')[0];
                 const servingType = food.serving_type == 'number' ? '1' : food.serving_type
-                const servingDetails = food.serving_size ? ` ${servingType}, ${food.calories_calculated_for.toFixed(0)}g` : `${servingType}, ${food.calories_calculated_for.toFixed(0)}g` ;
+                const servingDetails = food.serving_size ? ` ${servingType}, ${food.basic_unit_measure.toFixed(0)}g` : `${servingType}, ${food.basic_unit_measure.toFixed(0)}g` ;
 
                 foodName.innerHTML = `<span style="font-weight: bold;">${capitalizeFirstLetter(food.food_name)}</span>, ${servingDetails}`;
 
