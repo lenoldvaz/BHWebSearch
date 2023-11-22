@@ -54,7 +54,7 @@ function getFoodSearchResults() {
 
     // Set the Content-Type header for JSON data
     request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    request.setRequestHeader("x-api-key", "06220486a7216a9ead5fa6a9a5f4f82c");
+    request.setRequestHeader("x-api-key", "f00fd682a910ef7b0bbc634730111621");
 
 
     // When the request loads, do the following...
