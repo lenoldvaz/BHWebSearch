@@ -247,12 +247,19 @@ function getFoodDetails() {
               
                 // Extract the 'measure' value for the nutrient, default to 0 if not found
                 const nutrientMeasure = nutrient ? nutrient.measure : 0;
-                
+                if (nutrientClassName == 'gi' && !nutrientMeasure){
+
+                }
               
                 // Find the meter-fill and meter-text elements with the specified class
                 const meterFillNutrient = document.querySelector(`.meter-fill.${nutrientClassName}`);
                 const meterTextNutrient = document.querySelector(`.macro-title-count.${nutrientClassName}`);
-              
+                
+                if (nutrientClassName == 'gi' && !nutrientMeasure){
+                    const giCard = document.querySelector('.card.gi')
+                    giCard.classList.add('hide')
+                }
+
                 if (meterFillNutrient) {
                   if (nutrient) {
                     // Calculate the width based on nutrient measure
