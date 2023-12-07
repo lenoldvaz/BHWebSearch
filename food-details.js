@@ -186,8 +186,8 @@ function getFoodDetails() {
                 }
             
                 const recipe_link = document.querySelector('.recipe-link');
-            
-                if (data.recipe_link === null) {
+                console.log('recipe-link', data.recipe_link)
+                if (data.recipe_link === null || data.recipe_link === 'None' ) {
                     if (recipe_link) {
                         recipe_link.classList.add('hide');
                     }
@@ -280,11 +280,11 @@ function getFoodDetails() {
                   widthValuefat * 100,
                   (energyKcalMeasure*measure_ratio).toFixed(0)
                 );
-                console.log({
-                    "protein": widthValueprotein,
-                    "carbs": widthValuecarbs,
-                    "fat":widthValuefat
-                } )
+                // console.log({
+                //     "protein": widthValueprotein,
+                //     "carbs": widthValuecarbs,
+                //     "fat":widthValuefat
+                // } )
               }
               
               // Get the canvas element by its id and create a donut chart
@@ -351,7 +351,7 @@ function getFoodDetails() {
 
             //Construct a function to display nutrition values 
             function updateNutriTableValues(nutrientName, nutrientClassName, rda_value, measure_name) {
-                console.log(nutrientName)
+               // console.log(nutrientName)
                 
 
 
@@ -450,8 +450,9 @@ function getFoodDetails() {
                 
 
                 if (tagValue) {
-                    // Remove surrounding curly braces and split terms by comma
-                    const tagTerms = tagValue.replace(/[{}]/g, '').split(',');
+                    // Remove surrounding curly braces, trim spaces, and remove trailing commas, then split terms by comma
+                    const tagTerms = tagValue.replace(/[{}]/g, '').replace(/\s*,\s*$/, '').trim().split(',');
+
                     
                     // Iterate through each term
                     for (const term of tagTerms) {
@@ -786,7 +787,7 @@ function getFoodDetails() {
         
 
         //Update Nutrition table. You can change the rda values here 
-        updateNutriTableValues((unit_option_name == 'number' ? 1 : unit_option_name)+' ('+basicUnitMeasure.toFixed(2)+'g)','serving',0,"")
+        updateNutriTableValues((unit_option_name == 'number' ? 1 : unit_option_name)+' ('+basicUnitMeasure.toFixed(0)+'g)','serving',0,"")
         updateNutriTableValues('ENERC_KCAL', 'kcal', 2000, 'kcal')
         updateNutriTableValues('FAT', 'fat', 55, 'g')
         updateNutriTableValues('FASAT', 'fasat', 20, 'g')
