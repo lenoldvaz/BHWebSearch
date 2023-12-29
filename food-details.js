@@ -97,10 +97,10 @@ function getFoodDetails() {
 
             function updateBasicDetails() {
                 const foodName = document.querySelector('.food-name');
-                foodName.textContent = capitalizeFirstLetter(data.food_name);
+                foodName.textContent = capitalizeFirstLetter(data.common_names);
             
                 const breadcrumbs = document.querySelector('.breadcrumbs.currentsearch');
-                breadcrumbs.textContent = data.food_name;
+                breadcrumbs.textContent = data.common_names;
             
                 const veganImageUrl = 'url(https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/64e4d43508527271a013fd3c_vegan.svg)';
                 const nonVegImageUrl = 'url(https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/651b6918ea2f99f601cc8242_NV.svg)';

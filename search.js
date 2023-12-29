@@ -87,7 +87,7 @@ function getFoodSearchResults() {
                 const servingType = food.serving_type == 'number' ? '1' : food.serving_type
                 const servingDetails = food.serving_size ? ` ${servingType}, ${food.basic_unit_measure.toFixed(0)}g` : `${servingType}, ${food.basic_unit_measure.toFixed(0)}g` ;
 
-                foodName.innerHTML = `<span style="font-weight: bold;">${capitalizeFirstLetter(food.food_name)}</span>, ${servingDetails}`;
+                foodName.innerHTML = `<span style="font-weight: bold;">${capitalizeFirstLetter(food.common_names)}</span>, ${servingDetails}`;
 
 
                 const carbs = card.getElementsByClassName('sr-macro carbs')[0];
