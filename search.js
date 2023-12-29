@@ -35,7 +35,7 @@ function getFoodSearchResults() {
 
     
     // Append the search term as a URL parameter
-    const apiUrl = `${bhUrl}?value=${encodeURIComponent(searchTerm)}&limit=10&confidence=.3`;
+    const apiUrl = `${bhUrl}?value=${encodeURIComponent(searchTerm)}&limit=20&confidence=.1`;
 
     // Define the URL from the bhUrl variable
     //let url = bhUrl.toString();
