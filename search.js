@@ -1,5 +1,5 @@
 var input = document.querySelector('input[name="searchInput"]');
-let bhUrl = new URL("https://api.bonhappetee.com/search");
+let bhUrl = new URL("https://z9xynbxx33.execute-api.ap-south-1.amazonaws.com/search")//URL("https://api.bonhappetee.com/search");
 let hasResults = false; // Flag to track whether getFoodSearchResults has run successfully before
 
 let lastAppendedElements = []; // Create an array to keep track of the last appended elements
@@ -35,7 +35,7 @@ function getFoodSearchResults() {
 
     
     // Append the search term as a URL parameter
-    const apiUrl = `${bhUrl}?value=${encodeURIComponent(searchTerm)}&limit=20&confidence=.1`;
+    const apiUrl = `${bhUrl}?value=${encodeURIComponent(searchTerm)}&limit=20&page=1`;
 
     // Define the URL from the bhUrl variable
     //let url = bhUrl.toString();
@@ -53,8 +53,8 @@ function getFoodSearchResults() {
     request.open('GET', apiUrl, true);
 
     // Set the Content-Type header for JSON data
-    request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    request.setRequestHeader("x-api-key", "f00fd682a910ef7b0bbc634730111621");
+   // request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+   // request.setRequestHeader("x-api-key", "f00fd682a910ef7b0bbc634730111621");
 
 
     // When the request loads, do the following...
