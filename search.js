@@ -165,12 +165,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Listen for the Enter key press in the input field
     input.addEventListener("keyup", function (event) {
-        if (event.key === "Enter") {
-            //console.log('key up')
-            event.preventDefault(); // Prevent the default form submission behavior
-           // clearPrevious();
-            getFoodSearchResults(); // Call your function when Enter is pressed
+        const searchTerm = input.value.trim();
 
+        // Check if the length of the input is at least three characters
+        if (searchTerm.length >= 3) {
+            // Call your function when at least three characters are typed
+            event.preventDefault(); // Prevent the default form submission behavior
+            clearPrevious();
+            getFoodSearchResults();
         }
     });
+
+
+
+
+    // Listen for the Enter key press in the input field
+    // input.addEventListener("keyup", function (event) {
+    //     if (event.key === "Enter") {
+    //         //console.log('key up')
+    //         event.preventDefault(); // Prevent the default form submission behavior
+    //        // clearPrevious();
+    //         getFoodSearchResults(); // Call your function when Enter is pressed
+
+    //     }
+    // });
 });
