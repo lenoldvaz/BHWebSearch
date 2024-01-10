@@ -187,7 +187,7 @@ function getFoodDetails() {
             
                 const recipe_link = document.querySelector('.recipe-link');
                 console.log('recipe-link', data.recipe_link)
-                if (data.recipe_link === null || data.recipe_link === 'None' ) {
+                if (data.recipe_link === null || data.recipe_link === 'None' || data.recipe_link === 'null' ) {
                     if (recipe_link) {
                         recipe_link.classList.add('hide');
                     }

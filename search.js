@@ -1,5 +1,5 @@
 var input = document.querySelector('input[name="searchInput"]');
-let bhUrl = new URL("https://z9xynbxx33.execute-api.ap-south-1.amazonaws.com/search")//URL("https://api.bonhappetee.com/search");
+let bhUrl = new URL("https://kuae7vjpsj.execute-api.ap-south-1.amazonaws.com/Prod/search?value=")//URL("https://api.bonhappetee.com/search");
 let hasResults = false; // Flag to track whether getFoodSearchResults has run successfully before
 
 let lastAppendedElements = []; // Create an array to keep track of the last appended elements
@@ -54,7 +54,7 @@ function getFoodSearchResults() {
 
     // Set the Content-Type header for JSON data
    // request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-   // request.setRequestHeader("x-api-key", "f00fd682a910ef7b0bbc634730111621");
+   request.setRequestHeader("x-api-key", "QmON337jAvacFxWCjiSrk1CQi6Sci4yk4qNkjzLn");
 
 
     // When the request loads, do the following...
