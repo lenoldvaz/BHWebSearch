@@ -591,154 +591,58 @@ function getFoodDetails() {
             function updateFoodPairing(pairings) {
                 const foodPairingWrapper = document.querySelector('.food-pairing-wrapping');
                 let index = 1;
-
-
-                // Check if pairings is undefined or null
-                if (pairings === undefined || pairings === null) {
-                // Handle the case when pairings is undefined or null
-                const divBlock10 = document.querySelector('.food-pairing-wrapper');
-                if (divBlock10) {
-                    divBlock10.classList.add('Hide');
-                }
-                } else {
-                    // Continue with the rest of the code if pairings is an object
-                    for (const priorityKey in pairings) {
-                        // ... (rest of the code remains the same)
-                    }
-        
-                
-                    // Check if data.food_pairings is empty (an empty object)
-                    if (Object.keys(pairings).length === 0 && pairings.constructor === Object) {
-                        const divBlock10 = document.querySelector('.food-pairing-wrapper');
-                        if (divBlock10) {
-                            divBlock10.classList.add('Hide');
-                        }
-                    } else {
-                        for (const priorityKey in pairings) {
-                            // Create a row
-                            const pairingRow = document.createElement('div');
-                            pairingRow.classList.add('food-pairing-row');
-                
-                            if (pairings.hasOwnProperty(priorityKey)) {
-                                const priorityFoods = pairings[priorityKey];
-                
-                                // Create a div for the priority
-                                const priorityDiv = document.createElement('div');
-                                priorityDiv.classList.add('food-pairing-priority-text');
-                                priorityDiv.textContent = index.toString();
-                                index++;
-                
-                                pairingRow.appendChild(priorityDiv);
-                
-                                // create a container for the foods-items
-                                const foodPairingItemContainer = document.createElement('div');
-                                foodPairingItemContainer.classList.add('foodpairingitemcontainer');
-                
-                                pairingRow.appendChild(foodPairingItemContainer);
-
-                                 // Iterate through the foods in this priority, limiting to the first 2 items
-                                const foodsToShow = priorityFoods.slice(0, 2);
-                
-                                // Iterate through the foods in this priority
-                                foodsToShow.forEach((foodItem) => {
-                                    let pairedImageIcon; // Declare the variable here
-                
-                                    switch (foodItem.toLowerCase()) {
-                                        case 'meat curry':
-                                            case 'curry':
-                                            case 'gravy':
-                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317dfdaeabff71b2956_meat%20curry.svg';
-                                                break;
-                                            case 'rice':
-                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317dfdaeabff71b2956_meat%20curry.svg';
-                                                break;
-                                            case 'dal':
-                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038316f145b2e74599b0fe_dal.svg';
-                                                break;
-                                            case 'sauce':
-                                            case 'dressing':
-                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317623861f66264e74a_sauce.svg';
-                                                break;
-                                            case 'dip':
-                                            case 'condiment':
-                                            case 'dressing':
-                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/650383179f830c92c94fbc56_condiment.svg';
-                                                break;
-                                            case 'bread':
-                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317dfdaeabff71b2956_meat%20curry.svg';
-                                                break;
-                                            case 'salad':
-                                            case 'veggies':
-                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317dfdaeabff71b2956_meat%20curry.svg';
-                                                break;
             
-                                            case 'pickle':
-                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c0bbbe2ea725ffb9b_pickle.svg';
-                                                break;
-                                            case 'milk':
-                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c96969ba5745b6731_milk.svg';
-                                                break;
-                                            case 'nuts':
-                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c0bbbe2ea725ffb77_nut.svg';
-                                                break;
-                                            case 'full meal':
-                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65000a185219862012ed8b55_dinner.svg';
-                                                break;
-                                            case 'snack':
-                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978ce3df317bd68f3498_snack.svg';
-                                                break;
-                                            case 'fruit':
-                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c2feffa5e35e3e03a_fruit.svg';
-                                                break;
-                                            case 'cheese':
-                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/650398da85853dfb8c2fbff2_cheese.svg';
-                                                break;
-                                            case 'side dish':
-                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c3ae81612c6565e20_side%20dish.svg';
-                                                break;
-                                            case 'curd':
-                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/650398bd6b5dac33a4984f96_curd.svg';
-                                                break;
-                                            case 'roti':
-                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c6876380504a42795_roti.svg';
-                                                break;
-                                            case 'meat':
-                                                pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978cc284645ab4f956d3_meat.svg';
-                                                break;
+                for (const priorityKey in pairings) {
+                    if (pairings.hasOwnProperty(priorityKey)) {
+                        const priorityFoods = pairings[priorityKey];
             
-                                            default:
-                                                // Handle the case when none of the conditions match
-                                                break;
-                                    }
-                
-                                    const pairedFoodItem = document.createElement('div');
-                                    pairedFoodItem.classList.add('food-pairing-item');
-                
-                                    const pairedFoodImage = document.createElement('div');
-                                    pairedFoodImage.classList.add('pairedfoodimage');
-                                    pairedFoodImage.style.backgroundImage = `url('${pairedImageIcon}')`;
-                
-                                    const pairedFoodName = document.createElement('div');
-                                    pairedFoodName.classList.add('pairedfoodname');
-                                    pairedFoodName.textContent = foodItem;
-                
-                                    pairedFoodItem.appendChild(pairedFoodImage);
-                                    pairedFoodItem.appendChild(pairedFoodName);
-                
-                                    foodPairingItemContainer.appendChild(pairedFoodItem);
-                                    
-                                    // Append "OR" text unless it's the last item
-                                    if (index < foodsToShow.length - 1) {
-                                        const orText = document.createTextNode(' OR ');
-                                        foodPairingItemContainer.appendChild(orText);
-                                    }
-
-                                });
-                
-                                // Append the priority and paired foods to the wrapper
-                                foodPairingWrapper.appendChild(pairingRow);
+                        // Create a row 
+                        const pairingRow = document.createElement('div');
+                        pairingRow.classList.add('food-pairing-row');
+            
+                        // Create a div for the priority
+                        const priorityDiv = document.createElement('div');
+                        priorityDiv.classList.add('food-pairing-priority-text');
+                        priorityDiv.textContent = index.toString();
+                        index++;
+            
+                        pairingRow.appendChild(priorityDiv);
+            
+                        // Iterate through the foods in this priority
+                        priorityFoods.forEach((foodItem) => {
+                            let pairedImageIcon; // Declare the variable here
+            
+                            switch (foodItem.toLowerCase()) {
+                                // ... (your existing switch cases)
+            
+                                default:
+                                    // Handle the case when none of the conditions match
+                                    // You might want to set a default image or skip this foodItem
+                                    console.warn(`No icon found for foodItem: ${foodItem}`);
+                                    return;
                             }
-                        }
+            
+                            if (pairedImageIcon) {  // Check if pairedImageIcon is defined
+                                const pairedFoodItem = document.createElement('div');
+                                pairedFoodItem.classList.add('food-pairing-item');
+            
+                                const pairedFoodImage = document.createElement('div');
+                                pairedFoodImage.classList.add('pairedfoodimage');
+                                pairedFoodImage.style.backgroundImage = `url('${pairedImageIcon}')`;
+            
+                                const pairedFoodName = document.createElement('div');
+                                pairedFoodName.classList.add('pairedFoodName');
+                                pairedFoodName.textContent = foodItem;
+            
+                                pairedFoodItem.appendChild(pairedFoodImage);
+                                pairedFoodItem.appendChild(pairedFoodName);
+            
+                                pairingRow.appendChild(pairedFoodItem);
+                            }
+                        });
+            
+                        // Append the priority and paired foods to the wrapper
+                        foodPairingWrapper.appendChild(pairingRow);
                     }
                 }
             }
