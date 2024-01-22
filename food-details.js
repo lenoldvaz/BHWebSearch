@@ -643,6 +643,8 @@ function getFoodDetails() {
                                 }
                             } else {
                                 console.warn('foodItem is null or undefined');
+                                const foodPairingWrapper = document.querySelector('.food-pairing-wrapper');
+                                foodPairingWrapper.classList.add('hide')
                             }
                         });
 
