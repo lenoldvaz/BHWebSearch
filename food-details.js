@@ -609,37 +609,43 @@ function getFoodDetails() {
                         pairingRow.appendChild(priorityDiv);
             
                         // Iterate through the foods in this priority
+                       // Iterate through the foods in this priority
                         priorityFoods.forEach((foodItem) => {
-                            let pairedImageIcon; // Declare the variable here
-            
-                            switch (foodItem.toLowerCase()) {
-                                // ... (your existing switch cases)
-            
-                                default:
-                                    // Handle the case when none of the conditions match
-                                    // You might want to set a default image or skip this foodItem
-                                    console.warn(`No icon found for foodItem: ${foodItem}`);
-                                    return;
-                            }
-            
-                            if (pairedImageIcon) {  // Check if pairedImageIcon is defined
-                                const pairedFoodItem = document.createElement('div');
-                                pairedFoodItem.classList.add('food-pairing-item');
-            
-                                const pairedFoodImage = document.createElement('div');
-                                pairedFoodImage.classList.add('pairedfoodimage');
-                                pairedFoodImage.style.backgroundImage = `url('${pairedImageIcon}')`;
-            
-                                const pairedFoodName = document.createElement('div');
-                                pairedFoodName.classList.add('pairedFoodName');
-                                pairedFoodName.textContent = foodItem;
-            
-                                pairedFoodItem.appendChild(pairedFoodImage);
-                                pairedFoodItem.appendChild(pairedFoodName);
-            
-                                pairingRow.appendChild(pairedFoodItem);
+                            // Check if foodItem is null or undefined before applying toLowerCase
+                            if (foodItem) {
+                                let pairedImageIcon;
+
+                                switch (foodItem.toLowerCase()) {
+                                    // ... (your existing switch cases)
+
+                                    default:
+                                        // Handle the case when none of the conditions match
+                                        console.warn(`No icon found for foodItem: ${foodItem}`);
+                                        return;
+                                }
+
+                                if (pairedImageIcon) {
+                                    const pairedFoodItem = document.createElement('div');
+                                    pairedFoodItem.classList.add('food-pairing-item');
+
+                                    const pairedFoodImage = document.createElement('div');
+                                    pairedFoodImage.classList.add('pairedfoodimage');
+                                    pairedFoodImage.style.backgroundImage = `url('${pairedImageIcon}')`;
+
+                                    const pairedFoodName = document.createElement('div');
+                                    pairedFoodName.classList.add('pairedFoodName');
+                                    pairedFoodName.textContent = foodItem;
+
+                                    pairedFoodItem.appendChild(pairedFoodImage);
+                                    pairedFoodItem.appendChild(pairedFoodName);
+
+                                    pairingRow.appendChild(pairedFoodItem);
+                                }
+                            } else {
+                                console.warn('foodItem is null or undefined');
                             }
                         });
+
             
                         // Append the priority and paired foods to the wrapper
                         foodPairingWrapper.appendChild(pairingRow);
