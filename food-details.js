@@ -129,6 +129,7 @@ function getFoodDetails() {
             
                 const foodTagsDiv = document.querySelector('.foodtagsdiv');
                 if (isEmptyObject(data.food_tags)) {
+                    console.log("food_tags is empty")
                     foodTagsDiv.classList.add('hide');
                 } else {
                     const foodTagsListDiv = document.querySelector('.pill-wrapper');
@@ -437,7 +438,7 @@ function getFoodDetails() {
 
             function processHealthTags(healthTags) {
                 const healthTagList = document.querySelector('.health-tag-list');
-                //console.log ('healthTagList', healthTagList )
+                console.log ('healthTagList', healthTagList )
 
 
                 //Define the tags to find 
@@ -450,6 +451,9 @@ function getFoodDetails() {
                 
 
                 if (tagValue) {
+                    const healthTagDiv = document.querySelector('.foodtagsdiv')
+                    healthTagDiv.classList.remove('hide')
+                    console.log("tagterms found")
                     // Remove surrounding curly braces, trim spaces, and remove trailing commas, then split terms by comma
                     const tagTerms = tagValue.replace(/[{}]/g, '').replace(/\s*,\s*$/, '').trim().split(',');
 
@@ -497,7 +501,7 @@ function getFoodDetails() {
                     disorderTable.classList.add('Hide')
                     disorderDivTitle.classList.add('Hide')
                 } 
-                    disorderDivTitle.textContent = 'Health Tags for '+capitalizeFirstLetter(data.food_name)
+                    disorderDivTitle.textContent = 'Health Tags for '+capitalizeFirstLetter(data.common_names)
                 
         
             for (const disorder of disorders) {
@@ -616,13 +620,77 @@ function getFoodDetails() {
                                 let pairedImageIcon;
 
                                 switch (foodItem.toLowerCase()) {
-                                    // ... (your existing switch cases)
-
-                                    default:
-                                        // Handle the case when none of the conditions match
-                                        console.warn(`No icon found for foodItem: ${foodItem}`);
-                                        return;
-                                }
+                                    case 'meat curry':
+                                        case 'curry':
+                                        case 'gravy':
+                                            pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317dfdaeabff71b2956_meat%20curry.svg';
+                                            break;
+                                        case 'rice':
+                                            pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317dfdaeabff71b2956_meat%20curry.svg';
+                                            break;
+                                        case 'dal':
+                                            pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038316f145b2e74599b0fe_dal.svg';
+                                            break;
+                                        case 'sauce':
+                                        case 'dressing':
+                                            pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317623861f66264e74a_sauce.svg';
+                                            break;
+                                        case 'dip':
+                                        case 'condiment':
+                                        case 'dressing':
+                                            pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/650383179f830c92c94fbc56_condiment.svg';
+                                            break;
+                                        case 'bread':
+                                            pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317dfdaeabff71b2956_meat%20curry.svg';
+                                            break;
+                                        case 'salad':
+                                        case 'veggies':
+                                            pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65038317dfdaeabff71b2956_meat%20curry.svg';
+                                            break;
+        
+                                        case 'pickle':
+                                            pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c0bbbe2ea725ffb9b_pickle.svg';
+                                            break;
+                                        case 'milk':
+                                            pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c96969ba5745b6731_milk.svg';
+                                            break;
+                                        case 'nuts':
+                                            pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c0bbbe2ea725ffb77_nut.svg';
+                                            break;
+                                        case 'full meal':
+                                            pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/65000a185219862012ed8b55_dinner.svg';
+                                            break;
+                                        case 'snack':
+                                            pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978ce3df317bd68f3498_snack.svg';
+                                            break;
+                                        case 'fruit':
+                                            pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c2feffa5e35e3e03a_fruit.svg';
+                                            break;
+                                        case 'cheese':
+                                            pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/650398da85853dfb8c2fbff2_cheese.svg';
+                                            break;
+                                        case 'side dish':
+                                            pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c3ae81612c6565e20_side%20dish.svg';
+                                            break;
+                                        case 'curd':
+                                            pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/650398bd6b5dac33a4984f96_curd.svg';
+                                            break;
+                                        case 'roti':
+                                            pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978c6876380504a42795_roti.svg';
+                                            break;
+                                        case 'meat':
+                                            pairedImageIcon = 'https://uploads-ssl.webflow.com/649ee19d64485accdbd684b9/6503978cc284645ab4f956d3_meat.svg';
+                                            break;
+        
+                                        
+                                
+            
+                                        default:
+                                            // Handle the case when none of the conditions match
+                                            // You might want to set a default image or skip this foodItem
+                                            console.warn(`No icon found for foodItem: ${foodItem}`);
+                                            return;
+                                    }
 
                                 if (pairedImageIcon) {
                                     const pairedFoodItem = document.createElement('div');
