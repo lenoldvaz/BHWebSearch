@@ -57,7 +57,7 @@ function getFoodDetails() {
 
     // Set the Content-Type header for JSON data
     request.setRequestHeader("Accept", "application/json");
-    request.setRequestHeader("x-api-key", "f00fd682a910ef7b0bbc634730111621");
+    request.setRequestHeader("x-api-key", "4afd2fd1e34bbb1851f092d6844f3c4a");
 
     // When the 'request' or API request loads, do the following...
     request.onload = function() {
