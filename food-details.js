@@ -708,6 +708,8 @@ function getFoodDetails() {
                                     pairedFoodItem.appendChild(pairedFoodName);
 
                                     pairingRow.appendChild(pairedFoodItem);
+                                    const foodPairingWrapper = document.querySelector('.food-pairing-wrapper');
+                                foodPairingWrapper.classList.add('hide')
                                 }
                             } else {
                                 console.warn('foodItem is null or undefined');
