@@ -245,48 +245,55 @@ function getFoodDetails() {
             function updateNutrientValuesAbs(nutrientName, nutrientClassName) {
                 // Find the nutrient in the 'data.nutrition' array
                 const nutrient = data.nutrition.find(n => n.nutrient_tag_name === nutrientName);
-              
+            
                 // Extract the 'measure' value for the nutrient, default to 0 if not found
                 const nutrientMeasure = nutrient ? nutrient.measure : 0;
-                if (nutrientClassName == 'gi' && !nutrientMeasure){
-
+            
+                // Handle special case for 'gi'
+                if (nutrientClassName == 'gi' && !nutrientMeasure) {
+                    const giCard = document.querySelector('.card.gi');
+                    giCard.classList.add('hide');
                 }
-              
+            
                 // Find the meter-fill and meter-text elements with the specified class
                 const meterFillNutrient = document.querySelector(`.meter-fill.${nutrientClassName}`);
                 const meterTextNutrient = document.querySelector(`.macro-title-count.${nutrientClassName}`);
-                
-                if (nutrientClassName == 'gi' && !nutrientMeasure){
-                    const giCard = document.querySelector('.card.gi')
-                    giCard.classList.add('hide')
-                }
-
+            
+                // Calculate the width based on nutrient measure
+                const widthValue = nutrientMeasure;
+            
                 if (meterFillNutrient) {
-                  if (nutrient) {
-                    // Calculate the width based on nutrient measure
-                    const widthValue = nutrientMeasure;
-              
                     // Set the width of the meter-fill element
                     meterFillNutrient.style.width = `${widthValue}%`;
-              
+            
                     // Set the text content of the meter-text element as the rounded value
                     meterTextNutrient.textContent = `${Math.floor(widthValue)}`;
-                  }
                 }
-              
-                // Create a donut chart with the provided values
-                createDonutChart(
-                  widthValueprotein * 100,
-                  widthValuecarbs * 100,
-                  widthValuefat * 100,
-                  (energyKcalMeasure*measure_ratio).toFixed(0)
-                );
-                // console.log({
-                //     "protein": widthValueprotein,
-                //     "carbs": widthValuecarbs,
-                //     "fat":widthValuefat
-                // } )
-              }
+            
+                // Create a donut chart with the provided values if all nutrient measures are available
+                if (
+                    data.nutrition.every(n => n.measure !== undefined) &&
+                    widthValueprotein !== undefined &&
+                    widthValuecarbs !== undefined &&
+                    widthValuefat !== undefined &&
+                    energyKcalMeasure !== undefined
+                ) {
+                    createDonutChart(
+                        widthValueprotein * 100,
+                        widthValuecarbs * 100,
+                        widthValuefat * 100,
+                        (energyKcalMeasure * measure_ratio || 0).toFixed(0)
+                    );
+                }
+            
+                // Log nutrient values for debugging
+                console.log({
+                    "protein": widthValueprotein || 0,
+                    "carbs": widthValuecarbs || 0,
+                    "fat": widthValuefat || 0
+                });
+            }
+            
               
               // Get the canvas element by its id and create a donut chart
               function createDonutChart(p, c, f, k) {
