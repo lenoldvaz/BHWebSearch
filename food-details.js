@@ -201,98 +201,106 @@ function getFoodDetails() {
             
             
             // Function to update nutrient values
+           // Function to update nutrient values
             function updateNutrientValues(nutrientName, nutrientClassName) {
                 // Find the nutrient in the 'data.nutrition' array
                 const nutrient = data.nutrition.find(n => n.nutrient_tag_name === nutrientName);
-            
+
                 // Extract the 'measure' value for the nutrient, default to 0 if not found
                 const nutrientMeasure = nutrient ? nutrient.measure : 0;
-                //console.log(nutrientName,nutrientMeasure)
-              
-            
+
+                // Set the global variables based on nutrientClassName
+                if (nutrientClassName === 'protein') {
+                    window.widthValueprotein = (nutrientMeasure * 4) / total_calories;
+                } else if (nutrientClassName === 'carbs') {
+                    window.widthValuecarbs = (nutrientMeasure * 4) / total_calories;
+                } else if (nutrientClassName === 'fat') {
+                    window.widthValuefat = (nutrientMeasure * 9) / total_calories;
+                }
+
                 // Find the meter-fill and meter-text elements with the specified class
                 const meterFillNutrient = document.querySelector(`.meter-fill.${nutrientClassName}`);
                 const meterTextNutrient = document.querySelector(`.macro-title-count.left.${nutrientClassName}`);
-            
-                if (meterFillNutrient) {
-                if (nutrient && energyKcalNutrient) {
-                    // Calculate the width based on nutrient measure * 9 (for 'fat') or * 4 (for others) divided by total_calories
-                    let widthValue;
-            
-                    if (nutrientClassName === 'fat') {
-                    widthValue = (nutrientMeasure * 9) / (total_calories);
-                    } else {
-                    widthValue = (nutrientMeasure * 4) / (total_calories);
-                    }
-            
-                    // Set the width of the meter-fill element as a percentage
-                    meterFillNutrient.style.width = `${widthValue * 100}%`;
-            
-                    // Set the text content of the meter-text element with 2 decimal places
-                    meterTextNutrient.textContent = `${(widthValue * 100).toFixed(2)}%`;
-            
-                    // Set a global variable with a unique name for widthValue
-                    window[`widthValue${nutrientClassName}`] = widthValue;
-            
-                    // Log for debugging (you can uncomment this if needed)
-                    // console.log(`widthValue${nutrientClassName}`, widthValue * 100);
-                }
-                }
-                
-            }
-  
 
+                if (meterFillNutrient) {
+                    if (nutrient && energyKcalNutrient) {
+                        // Calculate the width based on nutrient measure * 9 (for 'fat') or * 4 (for others) divided by total_calories
+                        let widthValue;
+
+                        if (nutrientClassName === 'fat') {
+                            widthValue = (nutrientMeasure * 9) / total_calories;
+                        } else {
+                            widthValue = (nutrientMeasure * 4) / total_calories;
+                        }
+
+                        // Set the width of the meter-fill element as a percentage
+                        meterFillNutrient.style.width = `${widthValue * 100}%`;
+
+                        // Set the text content of the meter-text element with 2 decimal places
+                        meterTextNutrient.textContent = `${(widthValue * 100).toFixed(2)}%`;
+
+                        // Set a global variable with a unique name for widthValue
+                        window[`widthValue${nutrientClassName}`] = widthValue;
+
+                        // Log for debugging (you can uncomment this if needed)
+                         console.log(`widthValue${nutrientClassName}`, widthValue * 100);
+                    }
+                }
+            }
+
+            // Function to update nutrient values with absolute values
             function updateNutrientValuesAbs(nutrientName, nutrientClassName) {
                 // Find the nutrient in the 'data.nutrition' array
                 const nutrient = data.nutrition.find(n => n.nutrient_tag_name === nutrientName);
-            
+
                 // Extract the 'measure' value for the nutrient, default to 0 if not found
                 const nutrientMeasure = nutrient ? nutrient.measure : 0;
-            
+
                 // Handle special case for 'gi'
                 if (nutrientClassName == 'gi' && !nutrientMeasure) {
                     const giCard = document.querySelector('.card.gi');
                     giCard.classList.add('hide');
                 }
-            
+
                 // Find the meter-fill and meter-text elements with the specified class
                 const meterFillNutrient = document.querySelector(`.meter-fill.${nutrientClassName}`);
                 const meterTextNutrient = document.querySelector(`.macro-title-count.${nutrientClassName}`);
-            
+
                 // Calculate the width based on nutrient measure
                 const widthValue = nutrientMeasure;
-            
+
                 if (meterFillNutrient) {
                     // Set the width of the meter-fill element
                     meterFillNutrient.style.width = `${widthValue}%`;
-            
+
                     // Set the text content of the meter-text element as the rounded value
                     meterTextNutrient.textContent = `${Math.floor(widthValue)}`;
                 }
-            
+
                 // Create a donut chart with the provided values if all nutrient measures are available
                 if (
                     data.nutrition.every(n => n.measure !== undefined) &&
-                    widthValueprotein !== undefined &&
-                    widthValuecarbs !== undefined &&
-                    widthValuefat !== undefined &&
+                    window[`widthValueprotein`] !== undefined &&
+                    window[`widthValuecarbs`] !== undefined &&
+                    window[`widthValuefat`] !== undefined &&
                     energyKcalMeasure !== undefined
                 ) {
                     createDonutChart(
-                        widthValueprotein * 100,
-                        widthValuecarbs * 100,
-                        widthValuefat * 100,
+                        window[`widthValueprotein`] * 100,
+                        window[`widthValuecarbs`] * 100,
+                        window[`widthValuefat`] * 100,
                         (energyKcalMeasure * measure_ratio || 0).toFixed(0)
                     );
                 }
-            
+
                 // Log nutrient values for debugging
                 console.log({
-                    "protein": widthValueprotein || 0,
-                    "carbs": widthValuecarbs || 0,
-                    "fat": widthValuefat || 0
+                    "protein": window[`widthValueprotein`] || 0,
+                    "carbs": window[`widthValuecarbs`] || 0,
+                    "fat": window[`widthValuefat`] || 0
                 });
             }
+
             
               
               // Get the canvas element by its id and create a donut chart
