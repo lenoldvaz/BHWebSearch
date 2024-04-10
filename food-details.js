@@ -72,8 +72,8 @@ function getFoodDetails() {
 
 
             //Unit measure (basic unit measure / calories calculated for)
-            const basicUnitMeasure = data.measures.filter(a => a.default_measure == 't')[0].basic_unit_measure
-            const unit_option_name = data.measures.filter(a => a.default_measure == 't')[0].unit_option_name
+            const basicUnitMeasure = data.measures.filter(a => a.default_measure == 't').length > 0 ? data.measures.filter(a => a.default_measure == 't')[0].basic_unit_measure : data.measures[0].basic_unit_measure 
+            const unit_option_name = data.measures.filter(a => a.default_measure == 't').length > 0 ? data.measures.filter(a => a.default_measure == 't')[0].unit_option_name : data.measures[0].unit_option_name
             const calories_calculated_for = data.calories_calculated_for
             const measure_ratio = basicUnitMeasure/calories_calculated_for
             
