@@ -26,8 +26,8 @@ function getFoodSearchResults() {
      // Clear previous results only if getFoodSearchResults has run successfully before
 
      // Get the search term from the input field
-    //const searchTerm = input.value;
-    const searchTerm = 'butter';
+    const searchTerm = input.value;
+    //const searchTerm = 'butter';
 
 
 
