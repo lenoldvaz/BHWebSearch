@@ -1,6 +1,6 @@
 
 // Check if 'foodId' is a valid integer
-if (!isNaN(foodId) && Number.isInteger(parseFloat(foodId))) {
+if (foodId) {
     // Construct the food_url with the extracted 'id' value
     
     ingredient_url = new URL(`https://node.lenoldvaz.com/bh/ingredients?id=${foodId}`);
@@ -16,7 +16,7 @@ function getIngredients() {
     let request = new XMLHttpRequest();
 
     // Define the URL
-    let url = ingredient_url.toString();
+    let url = ingredient_url;
 
     // Open a request
     request.open('GET', url, true);

@@ -28,11 +28,13 @@ function getUrlParameter(name) {
 
 // Get the 'id' parameter value from the current page URL
 const foodId = getUrlParameter('id');
+console.log(foodId)
 let food_url; // Declare the food_url variable in the outer scope
 let ingredient_url; 
 
 // Check if 'foodId' is a valid integer
-if (!isNaN(foodId) && Number.isInteger(parseFloat(foodId))) {
+if (foodId) {
+    console.log('foodId if statement works')
     // Construct the food_url with the extracted 'id' value
     //food_url = new URL(`https://node.lenoldvaz.com/bh/search-food?id=${foodId}`);
     food_url = new URL(`https://api.bonhappetee.com/food?food_item_id=${foodId}`);
@@ -57,7 +59,7 @@ function getFoodDetails() {
 
     // Set the Content-Type header for JSON data
     request.setRequestHeader("Accept", "application/json");
-    request.setRequestHeader("x-api-key", "4afd2fd1e34bbb1851f092d6844f3c4a");
+    request.setRequestHeader("x-api-key", "9J2igc2Ta327zufqESYkA4lf0mkUyvtX57zTglFW");
 
     // When the 'request' or API request loads, do the following...
     request.onload = function() {

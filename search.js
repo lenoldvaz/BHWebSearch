@@ -55,7 +55,7 @@ function getFoodSearchResults() {
 
     // Set the Content-Type header for JSON data
    // request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-   request.setRequestHeader("x-api-key", "4afd2fd1e34bbb1851f092d6844f3c4a");
+   request.setRequestHeader("x-api-key", "9J2igc2Ta327zufqESYkA4lf0mkUyvtX57zTglFW");
 
 
     // When the request loads, do the following...
@@ -115,7 +115,7 @@ function getFoodSearchResults() {
                 // console.log(servingType); // This will log the retrieved value
 
 
-                document.location.href = "/food-search/search-results?id=" + food.food_id;
+                document.location.href = "/food-search/search-results?id=" + food.food_unique_id;
                 });
 
                 // Append the card to the card container
