@@ -583,7 +583,9 @@ function getFoodDetails() {
 
             //Create alternatives
 
-            let Alts = disorder.food_disorder_alts.map(a => a.food_name).join(',')
+            let Alts = disorder.food_disorder_alts
+                        .map(a => a.food_name.charAt(0).toUpperCase() + a.food_name.slice(1))
+                        .join(', ');
 
             const dAlts = document.createElement('div')
             dAlts.classList.add('table_row_text','disorder-alts')
