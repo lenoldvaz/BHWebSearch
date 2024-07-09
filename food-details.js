@@ -38,7 +38,7 @@ if (foodId) {
     // Construct the food_url with the extracted 'id' value
     //food_url = new URL(`https://node.lenoldvaz.com/bh/search-food?id=${foodId}`);
     food_url = new URL(`https://api.bonhappetee.com/food?food_item_id=${foodId}`);
-    ingredient_url = new URL(`https://node.lenoldvaz.com/bh/ingredients?id=${foodId}`);
+    ingredient_url = new URL(`https://api.bonhappetee.com/ingredients?id=${foodId}`);
     // The rest of your code to make the API request and process the response
     // ...
 } else {
