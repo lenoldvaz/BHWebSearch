@@ -579,7 +579,7 @@ function getFoodDetails() {
             //Create Risk reason 
             const disRiskReason = document.createElement('div')
             disRiskReason.classList.add('table_row_text','disorder-reason')
-            disRiskReason.textContent = disorder.disorder_risk_reason;
+            disRiskReason.textContent = "Disorder Risk Reason"+disorder.disorder_risk_reason;
 
             //Create alternatives
 
@@ -795,7 +795,7 @@ function getFoodDetails() {
         updateNutriTableValues('FATRN', 'fatrn', 1, 'g')
         updateNutriTableValues('FAMS', 'fams', 28, 'g')
         updateNutriTableValues('FAPU', 'fapu', 6, 'g')
-        updateNutriTableValues('CHOLE', 'chole', 300, 'g')
+        updateNutriTableValues('CHOLE', 'chole', 300, 'mg')
         updateNutriTableValues('CHOCDF', 'carbs', 130, 'g')
         updateNutriTableValues('FIBTG', 'fibtg', 30, 'g')
         updateNutriTableValues('SUGAR', 'sugar', 0, 'g') //sugar
