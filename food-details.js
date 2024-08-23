@@ -87,7 +87,7 @@ function getFoodDetails() {
              
             
               // Extract the 'measure' value for 'Energy_kcal', rounded to 2 decimal places, default to 0 if not found
-              window.energyKcalMeasure = energyKcalNutrient ? energyKcalNutrient.measure.toFixed(0) : 0;
+              window.energyKcalMeasure = energyKcalNutrient ? Math.round(energyKcalNutrient.measure) : 0;
           
               // Calculate the total calories based on 'Energy_kcal' measure
               const total_calories = energyKcalMeasure;
@@ -184,7 +184,7 @@ function getFoodDetails() {
                     if (weight) {
                         weight.classList.remove('hide');
                         const weightText = weight.querySelector('.serving-size-weight-text');
-                        weightText.textContent = Math.floor(basicUnitMeasure) + 'g';
+                        weightText.textContent = Math.round(basicUnitMeasure) + 'g';
                     }
                 }
             
@@ -239,7 +239,7 @@ function getFoodDetails() {
                         meterFillNutrient.style.width = `${widthValue * 100}%`;
 
                         // Set the text content of the meter-text element with 2 decimal places
-                        meterTextNutrient.textContent = `${(widthValue * 100).toFixed(2)}%`;
+                        meterTextNutrient.textContent = `${Math.round(widthValue * 100)}%`;
 
                         // Set a global variable with a unique name for widthValue
                         window[`widthValue${nutrientClassName}`] = widthValue;
@@ -276,7 +276,7 @@ function getFoodDetails() {
                     meterFillNutrient.style.width = `${widthValue}%`;
 
                     // Set the text content of the meter-text element as the rounded value
-                    meterTextNutrient.textContent = `${Math.floor(widthValue)}`;
+                    meterTextNutrient.textContent = `${Math.round(widthValue)}`;
                 }
 
                 // Create a donut chart with the provided values if all nutrient measures are available
@@ -291,7 +291,7 @@ function getFoodDetails() {
                         window[`widthValueprotein`] * 100,
                         window[`widthValuecarbs`] * 100,
                         window[`widthValuefat`] * 100,
-                        (energyKcalMeasure * measure_ratio || 0).toFixed(0)
+                        Math.round(energyKcalMeasure * measure_ratio || 0)
                     );
                 }
 
@@ -381,7 +381,7 @@ function getFoodDetails() {
 
 
                 // Extract the 'measure' value for the nutrient
-                const nutrientMeasure = nutrient ? ((nutrient.measure)*measure_ratio).toFixed(2) : 0;
+                const nutrientMeasure = nutrient ? Math.round((nutrient.measure)*measure_ratio) : 0;
                    // console.log('nutrientMeasure', nutrientMeasure)
 
                 // Find the element with the specified combo class
@@ -391,7 +391,7 @@ function getFoodDetails() {
 
                 if(nutriTableCellText && nutrientClassName !== 'kcal' && nutrientClassName !== 'serving') {
                     // Calculate daily value as a percentage of RDA
-                    const dailyValue = rda_value === 0 ? "NA" : ((nutrientMeasure / rda_value) * 100).toFixed(2) + "%";
+                    const dailyValue = rda_value === 0 ? "NA" : Math.round((nutrientMeasure / rda_value) * 100) + "%";
                     nutriTableCellText.textContent = dailyValue;
                     
                     //nutriTableGramWeightText.innerHTML += `<span style="font-weight: bold"> ${nutrientMeasure}g</span>`;
@@ -399,7 +399,7 @@ function getFoodDetails() {
 
 
                 } else if (nutriTableCellText && nutrientClassName == 'kcal'){
-                    nutriTableCellText.textContent = (total_calories*measure_ratio).toFixed(0) + " " + capitalizeFirstLetter(nutrientClassName);
+                    nutriTableCellText.textContent = Math.round(total_calories*measure_ratio) + " " + capitalizeFirstLetter(nutrientClassName);
                 }
                 
                 else {
@@ -788,7 +788,7 @@ function getFoodDetails() {
         
 
         //Update Nutrition table. You can change the rda values here 
-        updateNutriTableValues((unit_option_name == 'number' ? 1 : unit_option_name)+' ('+basicUnitMeasure.toFixed(0)+'g)','serving',0,"")
+        updateNutriTableValues((unit_option_name == 'number' ? 1 : unit_option_name)+' ('+Math.round(basicUnitMeasure)+'g)','serving',0,"")
         updateNutriTableValues('ENERC_KCAL', 'kcal', 2000, 'kcal')
         updateNutriTableValues('FAT', 'fat', 55, 'g')
         updateNutriTableValues('FASAT', 'fasat', 20, 'g')
