@@ -1,5 +1,5 @@
 var input = document.querySelector('input[name="searchInput"]');
-let bhUrl = new URL("https://kuae7vjpsj.execute-api.ap-south-1.amazonaws.com/Prod/search?value=")//URL("https://api.bonhappetee.com/search");
+let bhUrl = new URL("https://0ylc4ixcsg.execute-api.ap-south-1.amazonaws.com/bh/search")//URL("https://0ylc4ixcsg.execute-api.ap-south-1.amazonaws.com/bh/search");////
 let hasResults = false; // Flag to track whether getFoodSearchResults has run successfully before
 
 let lastAppendedElements = []; // Create an array to keep track of the last appended elements

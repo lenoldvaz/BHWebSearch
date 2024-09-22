@@ -3,7 +3,7 @@
 if (foodId) {
     // Construct the food_url with the extracted 'id' value
     
-    ingredient_url = new URL(`https://api.bonhappetee.com/ingredients?food_item_id=${foodId}`);
+    ingredient_url = new URL(`https://0ylc4ixcsg.execute-api.ap-south-1.amazonaws.com/bh/ingredients?id=${foodId}`);
     // The rest of your code to make the API request and process the response
     // ...
 } else {

@@ -37,8 +37,8 @@ if (foodId) {
     console.log('foodId if statement works')
     // Construct the food_url with the extracted 'id' value
     //food_url = new URL(`https://node.lenoldvaz.com/bh/search-food?id=${foodId}`);
-    food_url = new URL(`https://api.bonhappetee.com/food?food_item_id=${foodId}`);
-    ingredient_url = new URL(`https://api.bonhappetee.com/ingredients?id=${foodId}`);
+    food_url = new URL(`https://0ylc4ixcsg.execute-api.ap-south-1.amazonaws.com/bh/food?food_item_id=${foodId}`);
+    ingredient_url = new URL(`https://0ylc4ixcsg.execute-api.ap-south-1.amazonaws.com/bh/ingredients?id=${foodId}`);
     // The rest of your code to make the API request and process the response
     // ...
 } else {
@@ -59,7 +59,7 @@ function getFoodDetails() {
 
     // Set the Content-Type header for JSON data
     request.setRequestHeader("Accept", "application/json");
-    request.setRequestHeader("x-api-key", "9J2igc2Ta327zufqESYkA4lf0mkUyvtX57zTglFW");
+  //  request.setRequestHeader("x-api-key", "9J2igc2Ta327zufqESYkA4lf0mkUyvtX57zTglFW");
 
     // When the 'request' or API request loads, do the following...
     request.onload = function() {
