@@ -37,8 +37,8 @@ if (foodId) {
     console.log('foodId if statement works')
     // Construct the food_url with the extracted 'id' value
     //food_url = new URL(`https://node.lenoldvaz.com/bh/search-food?id=${foodId}`);
-    food_url = new URL(`https://bh.bonhappetee.com/food?food_item_id=${foodId}`);//URL(`https://0ylc4ixcsg.execute-api.ap-south-1.amazonaws.com/bh/food?food_item_id=${foodId}`);
-    ingredient_url = new URL(`https://bh.bonhappetee.com/ingredients?food_item_id=${foodId}`);//URL(`https://0ylc4ixcsg.execute-api.ap-south-1.amazonaws.com/bh/ingredients?id=${foodId}`);
+    food_url = new URL(`https://0ylc4ixcsg.execute-api.ap-south-1.amazonaws.com/bh/food?food_item_id=${foodId}`); //URL(`https://bh.bonhappetee.com/food?food_item_id=${foodId}`);//
+    ingredient_url = new URL(`https://0ylc4ixcsg.execute-api.ap-south-1.amazonaws.com/bh/ingredients?id=${foodId}`);//URL(`https://bh.bonhappetee.com/ingredients?food_item_id=${foodId}`);//
     // The rest of your code to make the API request and process the response
     // ...
 } else {
