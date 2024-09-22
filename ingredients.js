@@ -23,7 +23,7 @@ function getIngredients() {
 
     // Set the Content-Type header for JSON data
     request.setRequestHeader("Accept", "application/json");
-    request.setRequestHeader("x-api-key", "9J2igc2Ta327zufqESYkA4lf0mkUyvtX57zTglFW");
+   // request.setRequestHeader("x-api-key", "9J2igc2Ta327zufqESYkA4lf0mkUyvtX57zTglFW");
 
     // When the request or API request loads, do the following...
     request.onload = function() {
