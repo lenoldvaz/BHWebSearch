@@ -14,7 +14,7 @@ if (foodId) {
 
 function getIngredients() {
     let request = new XMLHttpRequest();
-
+ 
     // Define the URL
     let url = ingredient_url;
 
@@ -83,7 +83,7 @@ function getIngredients() {
                     });
 
                 
-
+                   
             
                     function processCats(item, parentProportion = 1) {
                         let id = item.food_category_id !== null ? Number(item.food_category_id) : null;

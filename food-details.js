@@ -199,13 +199,14 @@ function getFoodDetails() {
                         recipe_link.href = data.recipe_link;
                     }
                 }
+                
             }
             
             
             // Function to update nutrient values
            // Function to update nutrient values
             function updateNutrientValues(nutrientName, nutrientClassName) {
-                console.log("nutrientName",nutrientName)
+                console.log("nutrientName")
                 // Find the nutrient in the 'data.nutrition' array
                 const nutrient = data.nutrition.find(n => n.nutrient_tag_name === nutrientName);
 
@@ -511,104 +512,112 @@ function getFoodDetails() {
 
             function updateDisorders(disorders) {
                 const disorderTable = document.querySelector('.card.disorders');
-                //console.log('disorderTable', disorderTable);
+                // console.log('disorderTable', disorderTable);
                 const disorderDivTitle = document.querySelector('.disorder-div-title')
-                //console.log(disorderTable)
+                // console.log(disorderTable)
+                // console.log("disorders",disorders)
     
-                if (disorders === null ) {
-                    disorderTable.classList.add('Hide')
-                    disorderDivTitle.classList.add('Hide')
+                if (!disorders || disorders.length === 0 ) {
+                    disorderTable.classList.add('Hide');
+                    disorderDivTitle.classList.add('Hide');
+                    return; // Exit the function early if there are no disorders
                 } 
-                    disorderDivTitle.textContent = 'Health Tags for '+capitalizeFirstLetter(data.common_names)
+                disorderDivTitle.classList.remove('Hide');
+                disorderTable.classList.remove('Hide');
+                disorderDivTitle.textContent = 'Health Tags for ' + capitalizeFirstLetter(data.common_names);
                 
-        
-            for (const disorder of disorders) {
-            // Create a new row for each disorder
-            const disorderRow = document.createElement('div');
-            disorderRow.classList.add('table_content_row','is_disorders');
-        
-            // Create the cells
-        
-            // Create name cell
-            const disorderName = document.createElement('div');
-            disorderName.classList.add('table_row_text', 'disorder-name');
-            disorderName.textContent = disorder.disorder_name;
-        
-            // Create pill cell
-            const disorderRiskLevel = document.createElement('div');
-            disorderRiskLevel.classList.add('pill', 
-                disorder.disorder_risk_factor === 1 ? 'red' :
-                disorder.disorder_risk_factor === 2 ? 'orange' :
-                'green'
-            );
-                
+                //Clear existing rows
+                while (disorderTable.firstChild) {
+                    disorderTable.removeChild(disorderTable.firstChild);
+                }
 
-
-                const disorderPillBullet = document.createElement('div');
-                disorderPillBullet.classList.add('pill-bullet', 
-                disorder.disorder_risk_factor === 1 ? 'red' :
-                disorder.disorder_risk_factor === 2 ? 'orange' :
-                'green'
-            );
-
-            let riskText;
-        
-            switch (disorder.disorder_risk_factor) {
-                case 1:
-                riskText = 'Avoid this food';
-                break;
-                case 2:
-                riskText = 'Consume in moderation';
-                break;
-                case 3:
-                riskText = 'Can consume freely';
-                break;
-                default:
-                riskText = 'Default risk text';
-            }
-        
-            const disorderRisktext = document.createElement('div');
-            disorderRisktext.classList.add('pill-text', 
-                disorder.disorder_risk_factor === 1 ? 'red' :
-                disorder.disorder_risk_factor === 2 ? 'orange' :
-                'green'
-            );
-            disorderRisktext.textContent = riskText;
-        
-
-
-            //Create Risk reason 
-            const disRiskReason = document.createElement('div')
-            disRiskReason.classList.add('table_row_text','disorder-reason')
-            disRiskReason.textContent = "Disorder Risk Reason"+disorder.disorder_risk_reason;
-
-            //Create alternatives
-
-            let Alts = disorder.food_disorder_alts
-                        .map(a => a.food_name.charAt(0).toUpperCase() + a.food_name.slice(1))
-                        .join(', ');
-
-            const dAlts = document.createElement('div')
-            dAlts.classList.add('table_row_text','disorder-alts')
-            dAlts.textContent = Alts
-
-
-
-
-            // Append pill items to pill
+                for (const disorder of disorders) {
+                // Create a new row for each disorder
+                const disorderRow = document.createElement('div');
+                disorderRow.classList.add('table_content_row','is_disorders');
             
-            disorderRiskLevel.appendChild(disorderPillBullet);
-            disorderRiskLevel.appendChild(disorderRisktext);
-        
-            // Append cells to the disorder row
-            disorderRow.appendChild(disorderName);
-            disorderRow.appendChild(disorderRiskLevel);
-            disorderRow.appendChild(disRiskReason);
-            disorderRow.appendChild(dAlts);
-        
-            // Append the disorder row to the parent element
-            disorderTable.appendChild(disorderRow);
-            }
+                // Create the cells
+            
+                // Create name cell
+                const disorderName = document.createElement('div');
+                disorderName.classList.add('table_row_text', 'disorder-name');
+                disorderName.textContent = disorder.disorder_name;
+            
+                // Create pill cell
+                const disorderRiskLevel = document.createElement('div');
+                disorderRiskLevel.classList.add('pill', 
+                    disorder.disorder_risk_factor === 1 ? 'red' :
+                    disorder.disorder_risk_factor === 2 ? 'orange' :
+                    'green'
+                );
+                    
+
+
+                    const disorderPillBullet = document.createElement('div');
+                    disorderPillBullet.classList.add('pill-bullet', 
+                    disorder.disorder_risk_factor === 1 ? 'red' :
+                    disorder.disorder_risk_factor === 2 ? 'orange' :
+                    'green'
+                );
+
+                let riskText;
+            
+                switch (disorder.disorder_risk_factor) {
+                    case 1:
+                    riskText = 'Avoid this food';
+                    break;
+                    case 2:
+                    riskText = 'Consume in moderation';
+                    break;
+                    case 3:
+                    riskText = 'Can consume freely';
+                    break;
+                    default:
+                    riskText = 'Default risk text';
+                }
+            
+                const disorderRisktext = document.createElement('div');
+                disorderRisktext.classList.add('pill-text', 
+                    disorder.disorder_risk_factor === 1 ? 'red' :
+                    disorder.disorder_risk_factor === 2 ? 'orange' :
+                    'green'
+                );
+                disorderRisktext.textContent = riskText;
+            
+
+
+                //Create Risk reason 
+                const disRiskReason = document.createElement('div')
+                disRiskReason.classList.add('table_row_text','disorder-reason')
+                disRiskReason.textContent = "Disorder Risk Reason"+disorder.disorder_risk_reason;
+
+                //Create alternatives
+
+                let Alts = disorder.food_disorder_alts
+                            .map(a => a.food_name.charAt(0).toUpperCase() + a.food_name.slice(1))
+                            .join(', ');
+
+                const dAlts = document.createElement('div')
+                dAlts.classList.add('table_row_text','disorder-alts')
+                dAlts.textContent = Alts
+
+
+
+
+                // Append pill items to pill
+                
+                disorderRiskLevel.appendChild(disorderPillBullet);
+                disorderRiskLevel.appendChild(disorderRisktext);
+            
+                // Append cells to the disorder row
+                disorderRow.appendChild(disorderName);
+                disorderRow.appendChild(disorderRiskLevel);
+                disorderRow.appendChild(disRiskReason);
+                disorderRow.appendChild(dAlts);
+            
+                // Append the disorder row to the parent element
+                disorderTable.appendChild(disorderRow);
+                }
             }
             
             
@@ -767,16 +776,17 @@ function getFoodDetails() {
         
 
 
-
+            
         updateBasicDetails();
+      
         // Update disorders
         updateDisorders(data.disorder_data);
-            
+      
         //Update food Pairing 
         updateFoodPairing(data.food_pairing);
         //update health tags
         processHealthTags(data.food_tags);
-        
+       
         // Update prep tags
         processPreparationTags(data.preparation_tags);
         
@@ -787,7 +797,7 @@ function getFoodDetails() {
         updateFoodTime('dinner', 'dinner');
         updateFoodTime('snack', 'snack');
         
-
+        
         //Update Nutrition table. You can change the rda values here 
         updateNutriTableValues((unit_option_name == 'number' ? 1 : unit_option_name)+' ('+Math.round(basicUnitMeasure)+'g)','serving',0,"")
         updateNutriTableValues('ENERC_KCAL', 'kcal', 2000, 'kcal')
