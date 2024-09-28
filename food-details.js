@@ -91,7 +91,7 @@ function getFoodDetails() {
           
               // Calculate the total calories based on 'Energy_kcal' measure
               const total_calories = energyKcalMeasure;
-           // console.log('calories',total_calories )
+            console.log('calories',total_calories )
 
             
 
@@ -142,7 +142,7 @@ function getFoodDetails() {
             
                         if (tagValue) {
                             const foodtagTerms = tagValue.replace(/[{}]/g, '').split(',');
-                           // console.log(tagKey, foodtagTerms)
+                            console.log(tagKey, foodtagTerms)
             
                             switch (tagKey) {
                                 case 'meal_type':
@@ -205,6 +205,7 @@ function getFoodDetails() {
             // Function to update nutrient values
            // Function to update nutrient values
             function updateNutrientValues(nutrientName, nutrientClassName) {
+                console.log("nutrientName",nutrientName)
                 // Find the nutrient in the 'data.nutrition' array
                 const nutrient = data.nutrition.find(n => n.nutrient_tag_name === nutrientName);
 
@@ -514,7 +515,7 @@ function getFoodDetails() {
                 const disorderDivTitle = document.querySelector('.disorder-div-title')
                 //console.log(disorderTable)
     
-                if (disorders.length === 0 ) {
+                if (disorders === null ) {
                     disorderTable.classList.add('Hide')
                     disorderDivTitle.classList.add('Hide')
                 } 
