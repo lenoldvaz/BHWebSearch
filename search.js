@@ -3,6 +3,10 @@ let bhUrl = new URL("https://0l5jjp1ph8.execute-api.ap-south-1.amazonaws.com/bh/
 let hasResults = false; // Flag to track whether getFoodSearchResults has run successfully before
 
 let lastAppendedElements = []; // Create an array to keep track of the last appended elements
+let submitClickCount = 0;
+
+
+console.log("search file loaded")
 
 function clearPrevious() {
     // Iterate through the last appended elements and remove them
@@ -22,7 +26,7 @@ function capitalizeFirstLetter(string) {
 
 
 function getFoodSearchResults() {
-   // console.log('getfood');
+   console.log('getfood');
      // Clear previous results only if getFoodSearchResults has run successfully before
 
      // Get the search term from the input field
@@ -143,18 +147,48 @@ function hidePageContent() {
     srpagecontent.classList.add('hide')
 }
 
+
+
+function handleSubmit(event) {
+    console.log("Form submitted");
+    event.preventDefault();
+    submitClickCount++;
+    console.log("Submit count",submitClickCount )
+    // if(submitClickCount > 5) {
+    //     showSearchesUsedPopup();
+    // } else {
+        clearPrevious();
+        getFoodSearchResults();
+    // }
+   
+}
+
 document.addEventListener("DOMContentLoaded", function () {
-   // console.log('event')
+   console.log('DOM loaded')
     // Find the form element by its ID
-    //const searchForm = document.getElementById("searchForm");
+    const searchForm = document.getElementById("searchForm");
 
     // Add a submit event listener to the form
-   searchForm.addEventListener("submit", function (event) {
-        event.preventDefault(); // Prevent the default form submission behavior
-        //getFoodSearchResults(); // Call your function to handle the form submission
-        //console.log('prevented default')
+    if (searchForm) {
+        console.log('Search form found');
+        searchForm.addEventListener("submit", handleSubmit);
+    } else {
+        console.error('Search form not found');
+    }
 
    });
+
+
+   function showSearchesUsedPopup() {
+    const popup = document.getElementById('searches-used-popup');
+    if (popup) {
+        popup.style.display = 'block';
+    } else {
+        console.error('Popup with id "searches-used-popup" not found');
+    }
+}
+   
+
 
     // You can also find the button element by its ID and add a click event listener
     //const searchButton = document.getElementById("searchfood_button");
@@ -165,17 +199,17 @@ document.addEventListener("DOMContentLoaded", function () {
     //});
 
     // Listen for the Enter key press in the input field
-    input.addEventListener("keyup", function (event) {
-        const searchTerm = input.value.trim();
+    // input.addEventListener("keyup", function (event) {
+    //     const searchTerm = input.value.trim();
 
-        // Check if the length of the input is at least three characters
-        if (searchTerm.length >= 3) {
-            // Call your function when at least three characters are typed
-            event.preventDefault(); // Prevent the default form submission behavior
-            clearPrevious();
-            getFoodSearchResults();
-        }
-    });
+    //     // Check if the length of the input is at least three characters
+    //     if (searchTerm.length >= 3) {
+    //         // Call your function when at least three characters are typed
+    //         event.preventDefault(); // Prevent the default form submission behavior
+    //         clearPrevious();
+    //         getFoodSearchResults();
+    //     }
+    // });
 
 
 
@@ -190,4 +224,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
     //     }
     // });
-});
+// });
