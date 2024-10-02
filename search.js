@@ -69,7 +69,7 @@ function getFoodSearchResults() {
 
             if (hasResults) {
                 clearPrevious();
-               // console.log(hasResults)
+                console.log(hasResults)
             }
 
             // Map a variable called cardContainer to the Webflow element called "sr-container"
@@ -147,36 +147,63 @@ function hidePageContent() {
     srpagecontent.classList.add('hide')
 }
 
+function showRecaptcha() {
+    const recaptchaContainer = document.getElementById('recaptcha-container');
+    recaptchaContainer.style.display = 'block';
+  
+    // Hide all divs with class sr-result-bar
+    const resultBars = document.querySelectorAll('.sr-result-bar');
+    resultBars.forEach(bar => {
+      bar.style.display = 'none';
+    });
+  }
 
+function verifyRecaptcha() {
+  const response = grecaptcha.getResponse();
+  if (response.length === 0) {
+    alert("Please complete the reCAPTCHA");
+    return false;
+  } else {
+    submitClickCount = 0; // Reset the submit count
+    document.getElementById('recaptcha-container').style.display = 'none';
+    grecaptcha.reset();
+    clearPrevious();
+    getFoodSearchResults(); // Perform the search
+    return true;
+  }
+}
 
 function handleSubmit(event) {
     console.log("Form submitted");
     event.preventDefault();
     submitClickCount++;
-    console.log("Submit count",submitClickCount )
-    // if(submitClickCount > 5) {
-    //     showSearchesUsedPopup();
-    // } else {
-        clearPrevious();
-        getFoodSearchResults();
-    // }
-   
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-   console.log('DOM loaded')
-    // Find the form element by its ID
-    const searchForm = document.getElementById("searchForm");
-
-    // Add a submit event listener to the form
-    if (searchForm) {
-        console.log('Search form found');
-        searchForm.addEventListener("submit", handleSubmit);
+    console.log("Submit count", submitClickCount);
+  
+    if (submitClickCount > 5) {
+      showRecaptcha();
     } else {
-        console.error('Search form not found');
+      clearPrevious();
+      getFoodSearchResults();
     }
+  }
 
-   });
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log('DOM loaded');
+    const searchForm = document.getElementById("searchForm");
+    if (searchForm) {
+      console.log('Search form found');
+      searchForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+        if (submitClickCount > 5) {
+          verifyRecaptcha();
+        } else {
+          handleSubmit(event);
+        }
+      });
+    } else {
+      console.error('Search form not found');
+    }
+  });
 
 
    function showSearchesUsedPopup() {
